@@ -1,0 +1,725 @@
+<?php
+
+class Bulk_Watermark_Admin extends Bulk_Watermark {
+	/**
+	 * Error messages to diplay
+	 *
+	 * @var array
+	 */
+	private $_messages = array();
+		
+	
+	/**
+	 * Class constructor
+	 *
+	 */
+	public function __construct() {
+		$this->_plugin_dir   = DIRECTORY_SEPARATOR . str_replace(basename(__FILE__), null, plugin_basename(__FILE__));
+		$this->_settings_url = 'options-general.php?page=' . plugin_basename(__FILE__);;
+		
+		$allowed_options = array(
+			
+		);
+		
+		// set watermark options
+		if(array_key_exists('option_name', $_GET) && array_key_exists('option_value', $_GET)
+			&& in_array($_GET['option_name'], $allowed_options)) {
+			update_option($_GET['option_name'], $_GET['option_value']);
+			
+			header("Location: " . $this->_settings_url);
+			die();	
+		}elseif(array_key_exists('watermarkPreview', $_GET)) {
+			$this->doWatermarkPreview($_GET);
+			die();
+		
+		}elseif(array_key_exists('bulk_watermark_action', $_POST)) {
+			
+			$this->applyBulkWatermark($_POST['bulk_file_list']);
+			
+			//header("Location: " . $this->_settings_url);
+			//die();
+		} else {
+			// register installer function
+			register_activation_hook(TW_LOADER, array(&$this, 'activateWatermark'));
+			
+
+			$show_on_upload_screen = $this->get_option('show_on_upload_screen');	
+					 
+			if($show_on_upload_screen === "true"){	
+				add_filter('attachment_fields_to_edit', array(&$this, 'attachment_field_add_watermark'), 10, 2);
+			}
+			
+			// add plugin "Settings" action on plugin list
+			add_action('plugin_action_links_' . plugin_basename(TW_LOADER), array(&$this, 'add_plugin_actions'));
+			
+			// add links for plugin help, donations,...
+			add_filter('plugin_row_meta', array(&$this, 'add_plugin_links'), 10, 2);
+			
+			// push options page link, when generating admin menu
+			add_action('admin_menu', array(&$this, 'adminMenu'));
+	
+			// check if post_id is "-1", meaning we're uploading watermark image
+			if(!(array_key_exists('post_id', $_REQUEST) && $_REQUEST['post_id'] == -1)) {
+				// add filter for watermarking images
+				//add_filter('wp_generate_attachment_metadata', array(&$this, 'applyWatermark'));
+			}
+		}
+	}
+	
+	/**
+	 * Add "Settings" action on installed plugin list
+	 */
+	public function add_plugin_actions($links) {
+		array_unshift($links, '<a href="options-general.php?page=' . plugin_basename(__FILE__) . '">' . __('Settings') . '</a>');
+		
+		return $links;
+	}
+	
+	/**
+	 * Add links on installed plugin list
+	 */
+	public function add_plugin_links($links, $file) {
+		if($file == plugin_basename(TW_LOADER)) {
+			$links[] = '<a href="http://MyWebsiteAdvisor.com">Visit Us Online</a>';
+		}
+		
+		return $links;
+	}
+	
+	/**
+	 * Add menu entry for Signature Watermark settings and attach style and script include methods
+	 */
+	public function adminMenu() {		
+		// add option in admin menu, for setting details on watermarking
+		$plugin_page = add_options_page('Bulk Watermark Plugin Options', 'Bulk Watermark', 8, __FILE__, array(&$this, 'optionsPage'));
+
+		add_action('admin_print_styles-' . $plugin_page,     array(&$this, 'installStyles'));
+	}
+	
+	/**
+	 * Include styles used by Transparent Watermark Plugin
+	 */
+	public function installStyles() {
+		wp_enqueue_style('bulk-watermark', WP_PLUGIN_URL . $this->_plugin_dir . 'style.css');
+	}
+	
+
+
+
+
+
+	/**
+	 * List all fonts from the fonts dir
+	 *
+	 * @return array
+	 */
+	private function getFontList() {
+		$fonts_dir = WP_PLUGIN_DIR . $this->_plugin_dir . $this->_fonts_dir;
+
+		$fonts = array();
+		try {
+			$dir = new DirectoryIterator($fonts_dir);
+
+			foreach($dir as $file) {
+				if($file->isFile()) {
+					$font = pathinfo($file->getFilename());
+
+					if(strtolower($font['extension']) == 'ttf') {
+						if(!$file->isReadable()) {
+							$this->_messages['unreadable-font'] = sprintf('Some fonts are not readable, please try chmoding the contents of the folder <strong>%s</string> to writable and refresh this page.', $this->_plugin_dir . $this->_fonts_dir);
+						}
+
+						$fonts[$font['basename']] = str_replace('_', ' ', $font['filename']);
+					}
+				}
+			}
+
+			ksort($fonts);
+		} catch(Exception $e) {}
+
+		return $fonts;
+	}
+
+
+	function HtmlPrintBoxHeader($id, $title, $right = false) {
+		
+		?>
+		<div id="<?php echo $id; ?>" class="postbox">
+			<h3 class="hndle"><span><?php echo $title ?></span></h3>
+			<div class="inside">
+		<?php
+		
+		
+	}
+	
+	function HtmlPrintBoxFooter( $right = false) {
+		?>
+			</div>
+		</div>
+		<?php
+		
+	}
+
+
+
+	
+	function listFiles($dir){
+		$file_list_output = array();
+		$dir_list_output = array();
+		
+		$upload_dir   = wp_upload_dir();
+		$base_dir = $upload_dir['basedir'];
+		$base_url = $upload_dir['baseurl'];
+			
+		$dir_list_output[] = str_replace($_SERVER['DOCUMENT_ROOT'], '', $base_dir);
+						
+		$iterator = new RecursiveDirectoryIterator($base_dir);
+		foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
+			$file_info = pathinfo($file->getFilename());
+			if ( !$file->isFile() && is_numeric($file->getFilename()) ) { //create list of directories
+			
+				$dirPath = str_replace($_SERVER['DOCUMENT_ROOT'], '', $file->getPathname());
+				
+				$dir_list_output[] =  $dirPath;
+				
+			}
+		}
+		
+		
+		$iterator = new RecursiveDirectoryIterator($dir);
+		foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
+			$file_info = pathinfo($file->getFilename());
+			if($file->isFile() && strtolower($file_info['extension']) == 'jpg'){ //create list of files
+			
+				
+				$imgPath = $file->getPath()."/".$file->getFilename();
+				//$imgUrl = $base_url . "/" . $file->getFilename();
+				$imgUrl =  get_option('siteurl') ."/". str_replace(ABSPATH, '', $imgPath);
+				
+				$file_list_output[] = "<p><input name='bulk_file_list[]' value='$imgPath' type='checkbox' checked='checked'> <a class='watermark_preview' href='$imgUrl' target='_blank'>" . $file->getFilename() . "</a></p>";
+				
+		  	}
+		}
+			
+				
+		
+		sort($dir_list_output);
+		sort($file_list_output);
+
+		$output = array();
+		$output['files'] = $file_list_output;
+		$output['dirs'] = $dir_list_output;
+		
+		return $output;
+	}
+	
+
+	
+	/**
+	 * Display options page
+	 */
+	public function optionsPage() {
+		// if user clicked "Save Changes" save them
+		if(isset($_POST['Submit'])) {
+			foreach($this->_options as $option => $value) {
+				if(array_key_exists($option, $_POST)) {
+					update_option($option, $_POST[$option]);
+				} else {
+					update_option($option, $value);
+				}
+			}
+
+			$this->_messages['updated'][] = 'Options updated!';
+		}
+
+
+		if( !extension_loaded( 'gd' ) ) {
+			$this->_messages['error'][] = 'Bulk Watermark Plugin will not work without PHP extension GD.';
+		}
+		
+	
+		foreach($this->_messages as $namespace => $messages) {
+			foreach($messages as $message) {
+?>
+<div class="<?php echo $namespace; ?>">
+	<p>
+		<strong><?php echo $message; ?></strong>
+	</p>
+</div>
+<?php
+			}
+		}
+		
+		
+			
+			
+				
+?>
+<?
+ echo  "<script type='text/javascript' src='"."../".PLUGINDIR . "/". dirname(plugin_basename (__FILE__))."/watermark.js'></script>";                        
+                        echo "<script type='text/javascript'>
+                                          function image_add_watermark(){
+                                                  
+                
+                                          }
+                  
+                  
+                  			jQuery(document).ready(function(){
+                                              imagePreview();
+                                      });
+                                                                                        
+                                      </script>";                          
+									  
+	?>
+	
+									  
+<script type="text/javascript">var wpurl = "<?php bloginfo('wpurl'); ?>";</script>
+<div class="wrap" id="sm_div">
+	<div id="icon-options-general" class="icon32"><br /></div>
+	<h2>Bulk Watermark Plugin Settings</h2>
+	
+		<form method="post" action="">
+		
+	<div id="poststuff" class="metabox-holder has-right-sidebar">
+		<div class="inner-sidebar">
+			<div id="side-sortables" class="meta-box-sortabless ui-sortable" style="position:relative;">
+			
+<?php $this->HtmlPrintBoxHeader('pl_diag',__('Plugin Diagnostic Check','diagnostic'),true); ?>
+
+				<?
+				
+				echo "<p>Required PHP Version: 5.0+<br>";
+				echo "Current PHP Version: " . phpversion() . "</p>";
+				
+				
+				
+				echo "<p>Memory Use: " . number_format(memory_get_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
+				echo "<p>Peak Memory Use: " . number_format(memory_get_peak_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
+
+
+				$gdinfo = gd_info();
+			
+				if($gdinfo){
+					echo '<p>GD Support Enabled!<br>';
+					if($gdinfo['FreeType Support']){
+						 echo 'FreeType Support Enabled!</p>';
+					}else{
+						echo "Please Configure FreeType!</p>";
+					}
+				}else{
+					echo "<p>Please Configure GD!</p>";
+				}
+				
+				?>
+
+<?php $this->HtmlPrintBoxFooter(true); ?>
+
+
+
+<?php $this->HtmlPrintBoxHeader('pl_resources',__('Plugin Resources','resources'),true); ?>
+	<p><a href='http://mywebsiteadvisor.com/wordpress-plugins/bulk-watermark' target='_blank'>Plugin Homepage</a></p>
+	<p><a href='http://mywebsiteadvisor.com/contact-us'  target='_blank'>Plugin Support</a></p>
+	<p><a href='http://mywebsiteadvisor.com/contact-us'  target='_blank'>Suggest a Feature</a></p>
+<?php $this->HtmlPrintBoxFooter(true); ?>
+
+</div>
+</div>
+
+
+
+	<div class="has-sidebar sm-padded" >			
+		<div id="post-body-content" class="has-sidebar-content">
+			<div class="meta-box-sortabless">
+			
+								
+			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Uploads Directory','watermark-directory'),false); ?>					
+				
+				<? 
+					if(!isset($_POST['base_dir'])){
+						$upload_dir   = wp_upload_dir();
+						$base_dir = $upload_dir['basedir'];
+					}else{
+						$base_dir = $_SERVER['DOCUMENT_ROOT'] . $_POST['base_dir'];
+					}
+					
+					$dir_info = $this->listFiles($base_dir);
+					
+					
+					
+					echo "<form method='post'><select name='base_dir'>";
+						foreach($dir_info['dirs'] as $dir){
+							$selected = "";
+							if($_POST['base_dir'] == $dir){
+								$selected = "selected='selected'";
+							}
+							echo "<option $selected>$dir</option>";
+							
+						}
+					echo "</select> ";
+					echo " <input type='submit'>";
+					echo "</form>";
+					echo "<br>";
+					echo "<br>";
+					
+					echo "<b>" . count($dir_info['files']) . "</b> files found in: <b>" . str_replace($_SERVER['DOCUMENT_ROOT'], '', $base_dir) . "</b><br>";
+					echo "<br>";
+					
+					echo "<form method='post'>";
+					echo "<input type='hidden' name='bulk_watermark_action'>";
+					echo "<div style='overflow-y:scroll; height:250px; border:1px solid grey; padding:5px;'>";
+					foreach($dir_info['files'] as $file){
+						echo $file;
+					}
+					echo "</div>";
+					echo "<br>";
+					echo "<input type='submit' value='Apply Bulk Watermark'>";
+					echo "</form>";
+				?>
+				
+			<?php $this->HtmlPrintBoxFooter(false); ?>
+			
+			
+			
+		<?php $this->HtmlPrintBoxHeader('wm_backup',__('Backup','watermark-backup'),false); ?>
+			<?php
+			echo "<form method='post'>";
+			echo "<input type='hidden' name='watermark_backup' value='$base_dir'>";
+			echo "<input type='submit' value='Create Backup'>";
+			echo "</form>";
+			
+			
+			if(array_key_exists('watermark_backup', $_POST)) {
+				$bk_name = ABSPATH."/wp-content/watermark-backup/backup-".date('Y-m-d-His').".tgz";
+				$src_name = ABSPATH."/wp-content/";
+				$exclude = ABSPATH."/wp-content/watermark-backup";
+				
+				$command = "tar cvfz $bk_name $src_name --exclude=$exclude ";
+				exec($command);
+			}
+			
+			
+			$bk_dir = $bk_name = ABSPATH."/wp-content/watermark-backup";
+			
+			if(!is_dir($bk_dir)){
+				mkdir($bk_dir);
+			}
+			
+			if(!is_dir($bk_dir)){
+				echo "Can not access: $bk_dir<br>";
+			}
+	
+	
+			
+			
+			$iterator = new RecursiveDirectoryIterator($bk_dir);
+			foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
+				$file_info = pathinfo($file->getFilename());
+				if($file->isFile() && strtolower($file_info['extension']) == 'tgz'){ //create list of files
+				
+					$fileUrl = site_url()."/wp-content/watermark-backup/".$file->getFilename();
+					$filePath = ABSPATH."/wp-content/watermark-backup/".$file->getFilename();
+					
+					echo "<p><a  href='$fileUrl' target='_blank'>" . $file->getFilename() . "</a> : ";
+					echo number_format(filesize($filePath), 0) . " bytes   ";
+					echo date("Y-m-d H:i:s", filectime($filePath));
+					echo "</p>";
+
+					
+				}
+			}
+		
+		
+			?>
+		<?php $this->HtmlPrintBoxFooter(false); ?>
+		
+		
+		
+		<?php $this->HtmlPrintBoxHeader('wm_type',__('Watermark Type','watermark-type'),false); ?>
+
+			<a name="watermark_type"></a>
+			<div id="watermark_type" class="watermark_type">
+				
+				<p>Choose a Watermark Type.</p>
+<?php $watermark_type = $this->get_option('watermark_type'); ?>
+				<table class="form-table">
+					<tr valign="top">
+						<th scope="row">Watermark Type</th>
+						<td >
+							<fieldset>
+							<legend class="screen-reader-text"><span>Watermark Type</span></legend>
+								<input name="watermark_type" value="text-image" type="radio" <? if($watermark_type == "text-image"){echo "checked='checked'";}  ?> /> Text and Image <br />
+								<input name="watermark_type" value="text-only" type="radio" <? if($watermark_type == "text-only"){echo "checked='checked'";}  ?> /> Text Only <br />
+								<input name="watermark_type" value="image-only" type="radio" <? if($watermark_type == "image-only"){echo "checked='checked'";}  ?> />  Image Only <br />
+							</fieldset>
+						</td>
+					</tr>
+				
+			
+
+				
+			</table>
+			</div>
+	<?php $this->HtmlPrintBoxFooter(false); ?>
+
+			
+
+	<?php $this->HtmlPrintBoxHeader('wm_image',__('Image Watermark Options','image-watermark'),false); ?>
+
+			<a name="watermark_image"></a>
+			<div id="watermark_image" class="watermark_type">
+				
+				<p>Configure Signature Image Watermark. (Remember to use a .png file with transparency or translucency!)</p>
+				<p>Also keep in mind that your watermark image should be about the same with as the images you plan to watermark.</p>
+				<p>You may want to disable this plugin when you are uploading the logo image to be used by this plugin.</p>
+				
+
+				<table class="form-table">
+					<?php $watermark_image = $this->get_option('watermark_image'); ?>
+					
+					<tr valign="top">
+						<th scope="row">Watermark Image URL</th>
+						<td class="wr_width">
+							<fieldset class="wr_width">
+							<legend class="screen-reader-text"><span>Watermark Image URL</span></legend>
+	
+								<input id='watermark_image_url' name="watermark_image[url]" type="text" size="100" value="<?php echo $watermark_image['url']; ?>" />
+								
+								<?php if(substr($watermark_image['url'], -4, 4) != '.png'){ 
+									echo "ERROR: Image should be a .png file!<br>";
+									echo "We offer Premium versions of this plugin which support other image types! <a href='' target='_blank'>Click Here for More Info.</a>";
+									} 
+								?>
+							</fieldset>
+						</td>
+						
+					</tr>
+				
+
+					<tr valign="top">
+						<th scope="row">Image Width (Percentage)</th>
+						<td class="wr_width">
+							<fieldset class="wr_width">
+							<legend class="screen-reader-text"><span>Width</span></legend>
+	
+								<input id='watermark_image_width' type="text" size="5"  name="watermark_image[width]" value="<?php echo $watermark_image['width']; ?>">%
+							
+							</fieldset>
+						</td>
+					</tr>
+
+
+					
+					
+				</table>
+			</div>
+
+
+	<?php $this->HtmlPrintBoxFooter(false); ?>
+
+
+	<?php $this->HtmlPrintBoxHeader('wm_text',__('Text Watermark Options','text-watermark'),false); ?>
+	
+			<a name="watermark_text"></a>
+			<div id="watermark_text" class="watermark_type">
+				<p>Configure Signature Text Watermark. </p>
+				
+				<table class="form-table">
+					
+					<?php $watermark_text = $this->get_option('watermark_text'); ?>
+					<tr valign="top">
+						<th scope="row">Watermark Text</th>
+						<td>
+							<fieldset class="wr_width">
+							<legend class="screen-reader-text"><span>Watermark Text</span></legend>
+	
+								<input id='watermark_text_value' name="watermark_text[text]" type="text" size="50" value="<?php echo $watermark_text['text']; ?>" />
+								<p>Ex: &copy MyWebsiteAdvisor.com</p>
+							</fieldset>
+						</td>
+						
+					</tr>
+					
+
+
+					
+					<tr valign="top">
+						<th scope="row">Text Width (Percentage)</th>
+						<td >
+							<fieldset class="wr_width">
+							<legend class="screen-reader-text"><span>Width</span></legend>
+	
+								<input id='watermark_text_width' type="text" size="5"  name="watermark_text[width]" value="<?php echo $watermark_text['width']; ?>">%
+							
+							</fieldset>
+						</td>
+					</tr>				
+
+
+					<tr valign="top">
+						<th scope="row">Text Color</th>
+						<td >
+							<fieldset class="wr_width">
+							<legend class="screen-reader-text"><span>Text Color</span></legend>
+	
+								#<input id='watermark_text_color' type="text" size="5"  name="watermark_text[color]" value="<?php echo $watermark_text['color']; ?>">
+								<p>Ex: FFFFFF is White, 000000 is Black, FF0000 is Red</p>
+							</fieldset>
+						</td>
+						
+					</tr>
+
+					<tr valign="top">
+						<th scope="row">Text Transparency</th>
+						<td >
+							<fieldset class="wr_width">
+							<legend class="screen-reader-text"><span>Text Transparency</span></legend>
+	
+								<input id='watermark_text_transparency' type="text" size="5"  name="watermark_text[transparency]" value="<?php echo $watermark_text['transparency']; ?>">%
+								<p>0% is fully visible, 100% is invisible, 70% is barely visible</p>
+							</fieldset>
+						</td>
+						
+					</tr>						
+	
+					<tr valign="top">
+						<th scope="row">Watermark Font</th>
+						<td >
+							<fieldset >
+							<legend class="screen-reader-text"><span>Font</span></legend>
+	
+								
+								
+								<? 
+								$fonts = $this->getFontList();
+								
+								echo "<select id='watermark_text_font' name='watermark_text[font]'>";
+								
+								foreach($fonts as $font_file => $font_name){
+								
+									$selected = "";
+									
+									if($watermark_text['font'] == $font_file){
+										$selected = "selected='selected'";
+									}
+									
+									echo "<option value='$font_file' $selected>$font_name</option>";
+									
+								}
+								
+								echo "</select>";
+								 ?>
+								 
+							<p>Add your own fonts to the /fonts directory!</p>
+							</fieldset>
+						</td>
+						
+					</tr>									
+
+					
+				</table>
+			</div>
+
+	<?php $this->HtmlPrintBoxFooter(false); ?>
+
+<?php $this->HtmlPrintBoxHeader('wm_preview',__('Watermark Preview','preview-watermark'),false); ?>
+		<a name="watermark_text"></a>
+			<div id="watermark_text" class="watermark_type">
+				<p>Preview Your Text and Image Watermark</p>	
+
+				<table class="form-table">
+					
+					<?php $watermark_image = $this->get_option('watermark_image'); ?>
+					<tr valign="top">
+						<th scope="row">Watermark Preview</th>
+						<td>
+							<fieldset class="wr_width">
+							<legend class="screen-reader-text"><span>Watermark Preview</span></legend>
+	
+								<img id="watermarkPreview" src='' alt="Waternark Preview" width="500" />
+									
+							</fieldset>
+						</td>
+						
+					</tr>
+	
+				</table>
+				
+			</div>
+			
+		<?php $this->HtmlPrintBoxFooter(false); ?>
+		
+		
+		
+		<?php $this->HtmlPrintBoxHeader('wm_save',__('Dont Forget to Save!','save-watermark'),false); ?>
+		
+			<p class="submit">
+				<input type="submit" name="Submit" class="button-primary" value="Save Changes" />
+			</p>
+			
+			
+			<?php $this->HtmlPrintBoxFooter(false); ?>
+
+		
+</div></div></div></div>
+
+</form>
+
+</div>
+
+
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+	// call rel="ajax" links with ajax
+	jQuery('a[rel="ajax"]').click(function(eh) {
+		eh.preventDefault();
+
+		jQuery.get(jQuery(this).attr('href'));
+		jQuery(this).parents('div.updated, div.error').fadeOut('slow');
+	});
+	
+	// preview update
+	updatePreview = function() {
+		jQuery('#watermarkPreview').show();
+
+		watermark_text.text = jQuery('#watermark_text_value input:text');
+		
+		watermark_query = 'watermark_text[text]=' + jQuery('#watermark_text_value').val();
+		watermark_query += '&watermark_text[width]=' + jQuery('#watermark_text_width').val();
+		watermark_query += '&watermark_text[font]=' + jQuery('#watermark_text_font').val();
+		watermark_query += '&watermark_text[color]=' + jQuery('#watermark_text_color').val();
+		watermark_query += '&watermark_text[transparency]=' + jQuery('#watermark_text_transparency').val();
+			
+		watermark_query += '&watermark_image[url]=' + jQuery('#watermark_image_url').val();
+		watermark_query += '&watermark_image[width]=' + jQuery('#watermark_image_width').val();
+		
+		jQuery('#watermarkPreview').attr('src', location.href + '&watermarkPreview&' + watermark_query);
+		
+		
+	}
+	jQuery('#watermark_text_value').keyup(updatePreview);
+	jQuery('#watermark_text_width').keyup(updatePreview);
+	jQuery('#watermark_text_font').change(updatePreview);
+	jQuery('#watermark_text_color').keyup(updatePreview);
+	jQuery('#watermark_text_transparency').keyup(updatePreview);
+		
+	jQuery('#watermark_image_width').keyup(updatePreview);
+	jQuery('#watermark_image_url').keyup(updatePreview);
+	
+	updatePreview();
+});
+
+
+</script>
+
+
+
+<?php
+	}
+	
+
+
+}
+
+
+?>
