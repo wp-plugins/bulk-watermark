@@ -162,9 +162,8 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 
 
 
-	
-	function listFiles($dir){
-		$file_list_output = array();
+	function listDirectories($dir){
+		
 		$dir_list_output = array();
 		
 		$upload_dir   = wp_upload_dir();
@@ -183,8 +182,22 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 				$dir_list_output[] =  $dirPath;
 				
 			}
-		}
+		}			
 		
+		sort($dir_list_output);
+			
+		return $dir_list_output;	
+	}
+
+	
+	function listFiles($dir){
+		$file_list_output = array();
+	
+		
+		$upload_dir   = wp_upload_dir();
+		$base_dir = $upload_dir['basedir'];
+		$base_url = $upload_dir['baseurl'];
+			
 		
 		$iterator = new RecursiveDirectoryIterator($dir);
 		foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
@@ -200,17 +213,10 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 				
 		  	}
 		}
-			
 				
-		
-		sort($dir_list_output);
 		sort($file_list_output);
-
-		$output = array();
-		$output['files'] = $file_list_output;
-		$output['dirs'] = $dir_list_output;
-		
-		return $output;
+	
+		return $file_list_output;
 	}
 	
 
@@ -330,111 +336,9 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	<div class="has-sidebar sm-padded" >			
 		<div id="post-body-content" class="has-sidebar-content">
 			<div class="meta-box-sortabless">
-			
-								
-			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Uploads Directory','watermark-directory'),false); ?>					
 				
-				<? 
-					if(!isset($_POST['base_dir'])){
-						$upload_dir   = wp_upload_dir();
-						$base_dir = $upload_dir['basedir'];
-					}else{
-						$base_dir = $_SERVER['DOCUMENT_ROOT'] . $_POST['base_dir'];
-					}
-					
-					$dir_info = $this->listFiles($base_dir);
-					
-					
-					
-					echo "<form method='post'><select name='base_dir'>";
-						foreach($dir_info['dirs'] as $dir){
-							$selected = "";
-							if($_POST['base_dir'] == $dir){
-								$selected = "selected='selected'";
-							}
-							echo "<option $selected>$dir</option>";
-							
-						}
-					echo "</select> ";
-					echo " <input type='submit'>";
-					echo "</form>";
-					echo "<br>";
-					echo "<br>";
-					
-					echo "<b>" . count($dir_info['files']) . "</b> files found in: <b>" . str_replace($_SERVER['DOCUMENT_ROOT'], '', $base_dir) . "</b><br>";
-					echo "<br>";
-					
-					echo "<form method='post'>";
-					echo "<input type='hidden' name='bulk_watermark_action'>";
-					echo "<div style='overflow-y:scroll; height:250px; border:1px solid grey; padding:5px;'>";
-					foreach($dir_info['files'] as $file){
-						echo $file;
-					}
-					echo "</div>";
-					echo "<br>";
-					echo "<input type='submit' value='Apply Bulk Watermark'>";
-					echo "</form>";
-				?>
-				
-			<?php $this->HtmlPrintBoxFooter(false); ?>
-			
-			
-			
-		<?php $this->HtmlPrintBoxHeader('wm_backup',__('Backup','watermark-backup'),false); ?>
-			<?php
-			echo "<form method='post'>";
-			echo "<input type='hidden' name='watermark_backup' value='$base_dir'>";
-			echo "<input type='submit' value='Create Backup'>";
-			echo "</form>";
-			
-			
-			if(array_key_exists('watermark_backup', $_POST)) {
-				$bk_name = ABSPATH."/wp-content/watermark-backup/backup-".date('Y-m-d-His').".tgz";
-				$src_name = ABSPATH."/wp-content/";
-				$exclude = ABSPATH."/wp-content/watermark-backup";
-				
-				$command = "tar cvfz $bk_name $src_name --exclude=$exclude ";
-				exec($command);
-			}
-			
-			
-			$bk_dir = $bk_name = ABSPATH."/wp-content/watermark-backup";
-			
-			if(!is_dir($bk_dir)){
-				mkdir($bk_dir);
-			}
-			
-			if(!is_dir($bk_dir)){
-				echo "Can not access: $bk_dir<br>";
-			}
-	
-	
-			
-			
-			$iterator = new RecursiveDirectoryIterator($bk_dir);
-			foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
-				$file_info = pathinfo($file->getFilename());
-				if($file->isFile() && strtolower($file_info['extension']) == 'tgz'){ //create list of files
-				
-					$fileUrl = site_url()."/wp-content/watermark-backup/".$file->getFilename();
-					$filePath = ABSPATH."/wp-content/watermark-backup/".$file->getFilename();
-					
-					echo "<p><a  href='$fileUrl' target='_blank'>" . $file->getFilename() . "</a> : ";
-					echo number_format(filesize($filePath), 0) . " bytes   ";
-					echo date("Y-m-d H:i:s", filectime($filePath));
-					echo "</p>";
-
-					
-				}
-			}
 		
-		
-			?>
-		<?php $this->HtmlPrintBoxFooter(false); ?>
-		
-		
-		
-		<?php $this->HtmlPrintBoxHeader('wm_type',__('Watermark Type','watermark-type'),false); ?>
+		<?php $this->HtmlPrintBoxHeader('wm_type',__('Watermark Options','watermark-type'),false); ?>
 
 			<a name="watermark_type"></a>
 			<div id="watermark_type" class="watermark_type">
@@ -459,11 +363,6 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 				
 			</table>
 			</div>
-	<?php $this->HtmlPrintBoxFooter(false); ?>
-
-			
-
-	<?php $this->HtmlPrintBoxHeader('wm_image',__('Image Watermark Options','image-watermark'),false); ?>
 
 			<a name="watermark_image"></a>
 			<div id="watermark_image" class="watermark_type">
@@ -512,12 +411,6 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 					
 				</table>
 			</div>
-
-
-	<?php $this->HtmlPrintBoxFooter(false); ?>
-
-
-	<?php $this->HtmlPrintBoxHeader('wm_text',__('Text Watermark Options','text-watermark'),false); ?>
 	
 			<a name="watermark_text"></a>
 			<div id="watermark_text" class="watermark_type">
@@ -618,6 +511,11 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 					
 				</table>
 			</div>
+			
+			
+			<p class="submit">
+				<input type="submit" name="Submit" class="button-primary" value="Save Changes" />
+			</p>
 
 	<?php $this->HtmlPrintBoxFooter(false); ?>
 
@@ -648,17 +546,113 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 			
 		<?php $this->HtmlPrintBoxFooter(false); ?>
 		
-		
-		
-		<?php $this->HtmlPrintBoxHeader('wm_save',__('Dont Forget to Save!','save-watermark'),false); ?>
-		
-			<p class="submit">
-				<input type="submit" name="Submit" class="button-primary" value="Save Changes" />
-			</p>
+	
+	
+			<?php $this->HtmlPrintBoxHeader('wm_backup',__('Backup','watermark-backup'),false); ?>
+			<?php
+			echo "<form method='post'>";
+			echo "<input type='hidden' name='watermark_backup' value='$base_dir'>";
+			echo "<input type='submit' value='Create Backup'>";
+			echo "</form>";
 			
 			
-			<?php $this->HtmlPrintBoxFooter(false); ?>
+			if(array_key_exists('watermark_backup', $_POST)) {
+				$bk_name = ABSPATH."/wp-content/watermark-backup/backup-".date('Y-m-d-His').".tgz";
+				$src_name = ABSPATH."/wp-content/";
+				$exclude = ABSPATH."/wp-content/watermark-backup";
+				
+				$command = "tar cvfz $bk_name $src_name --exclude=$exclude ";
+				exec($command);
+			}
+			
+			
+			$bk_dir = $bk_name = ABSPATH."/wp-content/watermark-backup";
+			
+			if(!is_dir($bk_dir)){
+				mkdir($bk_dir);
+			}
+			
+			if(!is_dir($bk_dir)){
+				echo "Can not access: $bk_dir<br>";
+			}
+	
+	
+			
+			
+			$iterator = new RecursiveDirectoryIterator($bk_dir);
+			foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
+				$file_info = pathinfo($file->getFilename());
+				if($file->isFile() && strtolower($file_info['extension']) == 'tgz'){ //create list of files
+				
+					$fileUrl = site_url()."/wp-content/watermark-backup/".$file->getFilename();
+					$filePath = ABSPATH."/wp-content/watermark-backup/".$file->getFilename();
+					
+					echo "<p><a  href='$fileUrl' target='_blank'>" . $file->getFilename() . "</a> : ";
+					echo number_format(filesize($filePath), 0) . " bytes   ";
+					echo date("Y-m-d H:i:s", filectime($filePath));
+					echo "</p>";
 
+					
+				}
+			}
+		
+		
+			?>
+		<?php $this->HtmlPrintBoxFooter(false); ?>	
+
+
+			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Uploads Directory','watermark-directory'),false); ?>					
+				
+				<? 
+					if(!isset($_POST['base_dir'])){
+						$upload_dir   = wp_upload_dir();
+						$base_dir = $upload_dir['basedir'];
+					}else{
+						$base_dir = $_SERVER['DOCUMENT_ROOT'] . $_POST['base_dir'];
+					}
+					
+					$dir_info = $this->listDirectories($base_dir);
+					
+	
+					echo "<form method='post'><select name='base_dir'>";
+						echo "<option value=''>Select a Directory...</option>";
+						foreach($dir_info as $dir){
+							$selected = "";
+							if($_POST['base_dir'] == $dir){
+								$selected = "selected='selected'";
+							}
+							echo "<option $selected>$dir</option>";
+							
+						}
+					echo "</select> ";
+					echo " <input type='submit'>";
+					echo "</form>";
+					echo "<br>";
+					echo "<br>";
+					
+					
+					if(isset($_POST['base_dir']) and $_POST['base_dir'] != ''){
+						$file_info = $this->listFiles($base_dir);
+					
+						echo "<b>" . count($file_info) . "</b> files found in: <b>" . str_replace($_SERVER['DOCUMENT_ROOT'], '', $base_dir) . "</b><br>";
+						echo "<br>";
+						
+						echo "<form method='post'>";
+						echo "<input type='hidden' name='bulk_watermark_action'>";
+						echo "<div style='overflow-y:scroll; height:250px; border:1px solid grey; padding:5px;'>";
+						foreach($file_info as $file){
+							echo $file;
+						}
+						echo "</div>";
+						echo "<br>";
+						echo "<input type='submit' value='Apply Bulk Watermark'>";
+						echo "</form>";
+					}
+				?>
+				
+			<?php $this->HtmlPrintBoxFooter(false); ?>
+			
+		
 		
 </div></div></div></div>
 
