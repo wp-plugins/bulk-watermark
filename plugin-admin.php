@@ -40,7 +40,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 			//die();
 		} else {
 			// register installer function
-			register_activation_hook(TW_LOADER, array(&$this, 'activateWatermark'));
+			register_activation_hook(BW_LOADER, array(&$this, 'activateWatermark'));
 			
 
 			$show_on_upload_screen = $this->get_option('show_on_upload_screen');	
@@ -50,7 +50,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 			}
 			
 			// add plugin "Settings" action on plugin list
-			add_action('plugin_action_links_' . plugin_basename(TW_LOADER), array(&$this, 'add_plugin_actions'));
+			add_action('plugin_action_links_' . plugin_basename(BW_LOADER), array(&$this, 'add_plugin_actions'));
 			
 			// add links for plugin help, donations,...
 			add_filter('plugin_row_meta', array(&$this, 'add_plugin_links'), 10, 2);
@@ -79,7 +79,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	 * Add links on installed plugin list
 	 */
 	public function add_plugin_links($links, $file) {
-		if($file == plugin_basename(TW_LOADER)) {
+		if($file == plugin_basename(BW_LOADER)) {
 			$links[] = '<a href="http://MyWebsiteAdvisor.com">Visit Us Online</a>';
 		}
 		
@@ -87,7 +87,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	}
 	
 	/**
-	 * Add menu entry for Signature Watermark settings and attach style and script include methods
+	 * Add menu entry for Bulk Watermark settings and attach style and script include methods
 	 */
 	public function adminMenu() {		
 		// add option in admin menu, for setting details on watermarking
@@ -97,7 +97,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	}
 	
 	/**
-	 * Include styles used by Transparent Watermark Plugin
+	 * Include styles used by Bulk Watermark Plugin
 	 */
 	public function installStyles() {
 		wp_enqueue_style('bulk-watermark', WP_PLUGIN_URL . $this->_plugin_dir . 'style.css');
@@ -280,6 +280,41 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	
 									  
 <script type="text/javascript">var wpurl = "<?php bloginfo('wpurl'); ?>";</script>
+
+
+
+<style>
+
+.fb_edge_widget_with_comment {
+	position: absolute;
+	top: 0px;
+	right: 200px;
+}
+
+</style>
+
+<div  style="height:20px; vertical-align:top; width:50%; float:right; text-align:right; margin-top:5px; padding-right:16px; position:relative;">
+
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=253053091425708";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+	
+	<div class="fb-like" data-href="http://www.facebook.com/MyWebsiteAdvisor" data-send="true" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+	
+	
+	<a href="https://twitter.com/MWebsiteAdvisor" class="twitter-follow-button" data-show-count="false"  >Follow @MWebsiteAdvisor</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+
+</div>
+
+
+
 <div class="wrap" id="sm_div">
 	<div id="icon-options-general" class="icon32"><br /></div>
 	<h2>Bulk Watermark Plugin Settings</h2>
@@ -297,11 +332,6 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 				echo "<p>Required PHP Version: 5.0+<br>";
 				echo "Current PHP Version: " . phpversion() . "</p>";
 				
-				
-				
-				echo "<p>Memory Use: " . number_format(memory_get_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
-				echo "<p>Peak Memory Use: " . number_format(memory_get_peak_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
-
 
 				$gdinfo = gd_info();
 			
@@ -316,6 +346,35 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 					echo "<p>Please Configure GD!</p>";
 				}
 				
+				
+				
+				if( ini_get('safe_mode') ){
+					echo "<p><font color='red'>PHP Safe Mode is enabled!<br><b>Disable Safe Mode in php.ini!</b></font></p>";
+				}else{
+					echo "<p>PHP Safe Mode: is disabled!</p>";
+				}
+				
+				if( ini_get('allow_url_fopen')){
+					echo "<p>PHP allow_url_fopen: is enabled!</p>";
+				}else{
+					echo "<p><font color='red'>PHP allow_url_fopen: is disabled!<br><b>Enable allow_url_fopen in php.ini!</b></font></p>";
+				}
+				
+
+				if( ini_get('disable_functions') !== '' ){
+					echo "<p><font color='red'>Disabled PHP Functions: ".ini_get('disable_functions')."<br><b>Please enable these functions in php.ini!</b></font></p>";
+				}else{
+					echo "<p>Disabled PHP Functions: None Found!</p>";
+				}
+
+				
+				echo "<p>Memory Use: " . number_format(memory_get_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
+				
+				echo "<p>Peak Memory Use: " . number_format(memory_get_peak_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
+				
+				$lav = sys_getloadavg();
+				echo "<p>Server Load Average: ".$lav[0].", ".$lav[1].", ".$lav[2]."</p>";
+				
 				?>
 
 <?php $this->HtmlPrintBoxFooter(true); ?>
@@ -327,6 +386,46 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	<p><a href='http://mywebsiteadvisor.com/contact-us'  target='_blank'>Plugin Support</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us'  target='_blank'>Suggest a Feature</a></p>
 <?php $this->HtmlPrintBoxFooter(true); ?>
+
+
+<?php $this->HtmlPrintBoxHeader('pl_upgrade',__('Plugin Upgrades','upgrade'),true); ?>
+	
+	<p>
+	<a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/'  target='_blank'>Upgrade to Bulk Watermark Ultra!</a><br />
+	<br />
+	<b>Features:</b><br />
+	-Higher Quality Watermarks!<br />
+	-Fully Adjustable Watermark Locations!<br />
+	-Compatible with third party gallery plugins and themes that store images in the WordPress /uploads directory!.<br />
+	-And Much More!<br />
+	 </p>
+	<p>Click Here for <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/watermark-plugins-for-wordpress/' target='_blank'>More Watermark Plugins</a></p>
+	<p>-<a href='http://mywebsiteadvisor.com/wordpress-plugins/bulk-watermark/' target='_blank'>Bulk Watermark</a></p>
+	<p>-<a href='http://mywebsiteadvisor.com/wordpress-plugins/signature-watermark/' target='_blank'>Signature Watermark</a></p>
+	<p>-<a href='http://mywebsiteadvisor.com/wordpress-plugins/transparent-image-watermark/' target='_blank'>Transparent Image Watermark</a></p>
+	</p>
+	
+<?php $this->HtmlPrintBoxFooter(true); ?>
+
+
+<?php $this->HtmlPrintBoxHeader('more_plugins',__('More Plugins','more_plugins'),true); ?>
+	
+	<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
+	<p><a href='http://profiles.wordpress.org/MyWebsiteAdvisor/'  target='_blank'>Free Plugins on Wordpress.org!</a></p>
+	<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/'  target='_blank'>Free Plugins on Our Website!</a></p>	
+				
+<?php $this->HtmlPrintBoxFooter(true); ?>
+
+
+<?php $this->HtmlPrintBoxHeader('follow',__('Follow MyWebsiteAdvisor','follow'),true); ?>
+
+	<p><a href='http://facebook.com/MyWebsiteAdvisor/'  target='_blank'>Follow us on Facebook!</a></p>
+	<p><a href='http://twitter.com/MWebsiteAdvisor/'  target='_blank'>Follow us on Twitter!</a></p>
+	<p><a href='http://www.youtube.com/mywebsiteadvisor'  target='_blank'>Watch us on YouTube!</a></p>
+	<p><a href='http://MyWebsiteAdvisor.com/'  target='_blank'>Visit our Website!</a></p>	
+	
+<?php $this->HtmlPrintBoxFooter(true); ?>
+
 
 </div>
 </div>
@@ -548,58 +647,6 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 		
 	
 	
-			<?php $this->HtmlPrintBoxHeader('wm_backup',__('Backup','watermark-backup'),false); ?>
-			<?php
-			echo "<form method='post'>";
-			echo "<input type='hidden' name='watermark_backup' value='$base_dir'>";
-			echo "<input type='submit' value='Create Backup'>";
-			echo "</form>";
-			
-			
-			if(array_key_exists('watermark_backup', $_POST)) {
-				$bk_name = ABSPATH."/wp-content/watermark-backup/backup-".date('Y-m-d-His').".tgz";
-				$src_name = ABSPATH."/wp-content/";
-				$exclude = ABSPATH."/wp-content/watermark-backup";
-				
-				$command = "tar cvfz $bk_name $src_name --exclude=$exclude ";
-				exec($command);
-			}
-			
-			
-			$bk_dir = $bk_name = ABSPATH."/wp-content/watermark-backup";
-			
-			if(!is_dir($bk_dir)){
-				mkdir($bk_dir);
-			}
-			
-			if(!is_dir($bk_dir)){
-				echo "Can not access: $bk_dir<br>";
-			}
-	
-	
-			
-			
-			$iterator = new RecursiveDirectoryIterator($bk_dir);
-			foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
-				$file_info = pathinfo($file->getFilename());
-				if($file->isFile() && strtolower($file_info['extension']) == 'tgz'){ //create list of files
-				
-					$fileUrl = site_url()."/wp-content/watermark-backup/".$file->getFilename();
-					$filePath = ABSPATH."/wp-content/watermark-backup/".$file->getFilename();
-					
-					echo "<p><a  href='$fileUrl' target='_blank'>" . $file->getFilename() . "</a> : ";
-					echo number_format(filesize($filePath), 0) . " bytes   ";
-					echo date("Y-m-d H:i:s", filectime($filePath));
-					echo "</p>";
-
-					
-				}
-			}
-		
-		
-			?>
-		<?php $this->HtmlPrintBoxFooter(false); ?>	
-
 
 			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Uploads Directory','watermark-directory'),false); ?>					
 				

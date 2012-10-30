@@ -2,11 +2,11 @@
 
 class Bulk_Watermark {
 	/**
-	 * Signature Watermark version
+	 * Bulk Watermark version
 	 *
 	 * @var string
 	 */
-	public $version                 = '1.1';
+	public $version                 = '1.2';
 	
 	/**
 	 * Array with default options
@@ -124,6 +124,33 @@ class Bulk_Watermark {
 	
 	
 	public function applyBulkWatermark($file_list){
+	
+		
+	
+		?>
+		<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=253053091425708";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+	
+		<h2>Applying Watermarks...</h2>
+		
+		<p>Your images are now having the watermarks applied, you can see them below.<br />
+		If you find this plugin useful please support the author by recommending this to your friends!</p>	
+		
+		<br />
+	
+		<div class="fb-like" data-href="http://facebook.com/mywebsiteadvisor" data-send="true" data-width="600" data-show-faces="true" data-action="recommend"></div>
+	
+		<hr />
+		<br />
+	
+		<?php
+		
 	
 		set_time_limit(120); 
 		
