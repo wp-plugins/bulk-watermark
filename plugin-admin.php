@@ -113,6 +113,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 				'content' => "<h2>Support</h2><p>For Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
 			));
 	
+			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
 			//$contextual_help = 'HELP!';
 		}
 			
