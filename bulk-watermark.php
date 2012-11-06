@@ -6,7 +6,7 @@ class Bulk_Watermark {
 	 *
 	 * @var string
 	 */
-	public $version                 = '1.2';
+	public $version                 = '1.3';
 	
 	/**
 	 * Array with default options

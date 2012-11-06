@@ -57,6 +57,9 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 			
 			// push options page link, when generating admin menu
 			add_action('admin_menu', array(&$this, 'adminMenu'));
+			
+			//add help menu
+			add_filter('contextual_help', array(&$this,'adminHelp'), 10, 3);
 	
 			// check if post_id is "-1", meaning we're uploading watermark image
 			if(!(array_key_exists('post_id', $_REQUEST) && $_REQUEST['post_id'] == -1)) {
@@ -91,10 +94,32 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	 */
 	public function adminMenu() {		
 		// add option in admin menu, for setting details on watermarking
-		$plugin_page = add_options_page('Bulk Watermark Plugin Options', 'Bulk Watermark', 8, __FILE__, array(&$this, 'optionsPage'));
+		global $bulk_watermark_admin_page;
+		$bulk_watermark_admin_page = add_options_page('Bulk Watermark Plugin Options', 'Bulk Watermark', 8, __FILE__, array(&$this, 'optionsPage'));
 
-		add_action('admin_print_styles-' . $plugin_page,     array(&$this, 'installStyles'));
+		add_action('admin_print_styles-' . $bulk_watermark_admin_page,     array(&$this, 'installStyles'));
 	}
+	
+	
+	public function adminHelp($contextual_help, $screen_id, $screen){
+	
+		global $bulk_watermark_admin_page;
+		
+		if ($screen_id == $bulk_watermark_admin_page) {
+			
+			$screen->add_help_tab(array(
+				'id' => 'plugin-support',
+				'title' => "Plugin Support",
+				'content' => "<h2>Support</h2><p>For Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
+			));
+	
+			//$contextual_help = 'HELP!';
+		}
+			
+		//return $contextual_help;
+
+	}
+	
 	
 	/**
 	 * Include styles used by Bulk Watermark Plugin
@@ -362,7 +387,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 				
 
 				if( ini_get('disable_functions') !== '' ){
-					echo "<p><font color='red'>Disabled PHP Functions: ".ini_get('disable_functions')."<br><b>Please enable these functions in php.ini!</b></font></p>";
+					echo "<p><font color='red'>Disabled PHP Functions Detected!<br><b>Please enable these functions in php.ini!</b></font></p>";
 				}else{
 					echo "<p>Disabled PHP Functions: None Found!</p>";
 				}
@@ -382,9 +407,10 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 
 
 <?php $this->HtmlPrintBoxHeader('pl_resources',__('Plugin Resources','resources'),true); ?>
-	<p><a href='http://mywebsiteadvisor.com/wordpress-plugins/bulk-watermark' target='_blank'>Plugin Homepage</a></p>
-	<p><a href='http://mywebsiteadvisor.com/contact-us'  target='_blank'>Plugin Support</a></p>
-	<p><a href='http://mywebsiteadvisor.com/contact-us'  target='_blank'>Suggest a Feature</a></p>
+	<p><a href='http://mywebsiteadvisor.com/wordpress-plugins/bulk-watermark/' target='_blank'>Plugin Homepage</a></p>
+	<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
+	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Suggest a Feature</a></p>
+	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
 <?php $this->HtmlPrintBoxFooter(true); ?>
 
 
@@ -400,9 +426,9 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	-And Much More!<br />
 	 </p>
 	<p>Click Here for <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/watermark-plugins-for-wordpress/' target='_blank'>More Watermark Plugins</a></p>
-	<p>-<a href='http://mywebsiteadvisor.com/wordpress-plugins/bulk-watermark/' target='_blank'>Bulk Watermark</a></p>
-	<p>-<a href='http://mywebsiteadvisor.com/wordpress-plugins/signature-watermark/' target='_blank'>Signature Watermark</a></p>
-	<p>-<a href='http://mywebsiteadvisor.com/wordpress-plugins/transparent-image-watermark/' target='_blank'>Transparent Image Watermark</a></p>
+	<p>-<a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Bulk Watermark</a></p>
+	<p>-<a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/signature-watermark/' target='_blank'>Signature Watermark</a></p>
+	<p>-<a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/transparent-image-watermark/' target='_blank'>Transparent Image Watermark</a></p>
 	</p>
 	
 <?php $this->HtmlPrintBoxFooter(true); ?>
@@ -412,7 +438,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	
 	<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
 	<p><a href='http://profiles.wordpress.org/MyWebsiteAdvisor/'  target='_blank'>Free Plugins on Wordpress.org!</a></p>
-	<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/'  target='_blank'>Free Plugins on Our Website!</a></p>	
+	<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/'  target='_blank'>Free Plugins on MyWebsiteAdvisor.com!</a></p>	
 				
 <?php $this->HtmlPrintBoxFooter(true); ?>
 
