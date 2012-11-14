@@ -112,6 +112,24 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 				'title' => "Plugin Support",
 				'content' => "<h2>Support</h2><p>For Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
 			));
+			
+			$faqs = "<p><b>Question: Why am I getting low quality watermarks?</b><br>Answer: The plugin needs to change the size of your watermark image, according to the size of your original image.  You should use a watermark image that is roughly the same width as your largest images intended to be watermarked.  That way the plugin will scale them down, resulting in no loss of quality.  When the plugin is forced to do the opposite and increase the size of a small watermark image, low quality watermarks may occur.</p>";
+			
+			$faqs .= "<p><b>Question: How can I add more fonts?</b><br>Answer: You can add more fonts by saving them to the fonts directory in the plugin folder.  You will need to make sure they have the same permissions as the other font files to be accessable by the plugin.</p>";
+			
+			$faqs .= "<p><b>Question: How can I remove the watermarks?</b><br>Answer: This plugin permenantly alters the images to contain the watermarks, so the watermarks can not be removed.  If you want to simply test this plugin, or think you may want to remove the watermarks, you need to make a backup of your images before you run the plugin to add watermarks.</p>";
+			
+			$screen->add_help_tab(array(
+				'id' => 'plugin-faq',
+				'title' => "Plugin FAQ's",
+				'content' => "<h2>Frequently Asked Questions</h2>".$faqs
+			));
+			
+			$screen->add_help_tab(array(
+				'id' => 'plugin-upgrades',
+				'title' => "Plugin Upgrades",
+				'content' => "<h2>Plugin Upgrades</h2><p>We also offer a premium version of this pluign with extended features!<br>You can learn more about it here: <a href='http://mywebsiteadvisor.com/tools//wordpress-plugins/bulk-watermark/' target='_blank'>MyWebsiteAdvisor.com</a></p><p>Learn more about our different watermark plugins for WordPress here: <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/watermark-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><p>Learn about all of our free plugins for WordPress here: <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
+			));
 	
 			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
 			//$contextual_help = 'HELP!';
@@ -408,7 +426,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 
 
 <?php $this->HtmlPrintBoxHeader('pl_resources',__('Plugin Resources','resources'),true); ?>
-	<p><a href='http://mywebsiteadvisor.com/wordpress-plugins/bulk-watermark/' target='_blank'>Plugin Homepage</a></p>
+	<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Plugin Homepage</a></p>
 	<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Suggest a Feature</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
@@ -718,6 +736,8 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 							echo $file;
 						}
 						echo "</div>";
+						echo "<br>";
+						echo "<p><b><font color='red'>NOTICE: Watermarking Images with this plugin is permenant, watermarks can not be removed.  You should make a backup of your images before you apply the watermarks!</font></b></p>";
 						echo "<br>";
 						echo "<input type='submit' value='Apply Bulk Watermark'>";
 						echo "</form>";
