@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
 
@@ -80,7 +80,10 @@ If we choose your testimonial or website we can link to your site and generate s
 == Screenshots ==
 
 1. Finished Example Image
-3. Admin Page
+2. Watermark Settings
+3. Watermark Settings Preview
+4. Select Images to Watermark with Image Preview Popup
+5. Watermarks getting applied to the selected images
 
 
 
@@ -113,3 +116,7 @@ If we choose your testimonial or website we can link to your site and generate s
 = 1.4.3 =
 * added plugin meta row link to rate this plugin
 * minor cleanup of old unused code
+
+= 1.4.4 =
+* added better screenshots to demonstrate how the plugin works
+
