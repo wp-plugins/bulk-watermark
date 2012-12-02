@@ -29,26 +29,17 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 			header("Location: " . $this->_settings_url);
 			die();	
 		}elseif(array_key_exists('watermarkPreview', $_GET)) {
-			$this->doWatermarkPreview($_GET);
+			$this->do_watermark_preview($_GET);
 			die();
 		
 		}elseif(array_key_exists('bulk_watermark_action', $_POST)) {
 			
-			$this->applyBulkWatermark($_POST['bulk_file_list']);
+			$this->apply_bulk_watermark($_POST['bulk_file_list']);
 			
-			//header("Location: " . $this->_settings_url);
-			//die();
 		} else {
 			// register installer function
-			register_activation_hook(BW_LOADER, array(&$this, 'activateWatermark'));
-			
-
-			$show_on_upload_screen = $this->get_option('show_on_upload_screen');	
-					 
-			if($show_on_upload_screen === "true"){	
-				add_filter('attachment_fields_to_edit', array(&$this, 'attachment_field_add_watermark'), 10, 2);
-			}
-			
+			register_activation_hook(BW_LOADER, array(&$this, 'activate_watermark'));	
+	
 			// add plugin "Settings" action on plugin list
 			add_action('plugin_action_links_' . plugin_basename(BW_LOADER), array(&$this, 'add_plugin_actions'));
 			
@@ -56,19 +47,18 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 			add_filter('plugin_row_meta', array(&$this, 'add_plugin_links'), 10, 2);
 			
 			// push options page link, when generating admin menu
-			add_action('admin_menu', array(&$this, 'adminMenu'));
+			add_action('admin_menu', array(&$this, 'admin_menu'));
 			
 			//add help menu
-			add_filter('contextual_help', array(&$this,'adminHelp'), 10, 3);
+			add_filter('contextual_help', array(&$this,'admin_help'), 10, 3);
 	
-			// check if post_id is "-1", meaning we're uploading watermark image
-			if(!(array_key_exists('post_id', $_REQUEST) && $_REQUEST['post_id'] == -1)) {
-				// add filter for watermarking images
-				//add_filter('wp_generate_attachment_metadata', array(&$this, 'applyWatermark'));
-			}
 		}
 	}
 	
+	
+
+
+
 	/**
 	 * Add "Settings" action on installed plugin list
 	 */
@@ -83,7 +73,11 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(BW_LOADER)) {
-			$links[] = '<a href="http://MyWebsiteAdvisor.com">Visit Us Online</a>';
+			$upgrade_url = 'http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/';
+			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
+		
+			$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';
+			$links[] = '<a href="'.$rate_url.'" target="_blank" title="Click Here to Rate and Review this Plugin on WordPress.org">Rate This Plugin</a>';
 		}
 		
 		return $links;
@@ -92,7 +86,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	/**
 	 * Add menu entry for Bulk Watermark settings and attach style and script include methods
 	 */
-	public function adminMenu() {		
+	public function admin_menu() {		
 		// add option in admin menu, for setting details on watermarking
 		global $bulk_watermark_admin_page;
 		$bulk_watermark_admin_page = add_options_page('Bulk Watermark Plugin Options', 'Bulk Watermark', 8, __FILE__, array(&$this, 'optionsPage'));
@@ -101,11 +95,19 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	}
 	
 	
-	public function adminHelp($contextual_help, $screen_id, $screen){
+	public function admin_help($contextual_help, $screen_id, $screen){
 	
 		global $bulk_watermark_admin_page;
 		
 		if ($screen_id == $bulk_watermark_admin_page) {
+			
+			$support_the_dev = $this->display_support_us();
+			$screen->add_help_tab(array(
+				'id' => 'developer-support',
+				'title' => "Support the Developer",
+				'content' => "<h2>Support the Developer</h2><p>".$support_the_dev."</p>"
+			));
+			
 			
 			$screen->add_help_tab(array(
 				'id' => 'plugin-support',
@@ -132,12 +134,31 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 			));
 	
 			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
-			//$contextual_help = 'HELP!';
+			
 		}
 			
-		//return $contextual_help;
+		
 
 	}
+	
+	
+	
+	
+	public function display_support_us(){
+				
+		$string = '<p><b>Thank You for using the Bulk Watermark Plugin for WordPress!</b></p>';
+		$string .= "<p>Please take a moment to <b>Support the Developer</b> by doing some of the following items:</p>";
+		
+		$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';
+		$string .= "<li><a href='$rate_url' target='_blank' title='Click Here to Rate and Review this Plugin on WordPress.org'>Click Here</a> to Rate and Review this Plugin on WordPress.org!</li>";
+		
+		$string .= "<li><a href='http://facebook.com/MyWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Facebook'>Click Here</a> to Follow MyWebsiteAdvisor on Facebook!</li>";
+		$string .= "<li><a href='http://twitter.com/MWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Twitter'>Click Here</a> to Follow MyWebsiteAdvisor on Twitter!</li>";
+		$string .= "<li><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/' target='_blank' title='Click Here to Purchase one of our Premium WordPress Plugins'>Click Here</a> to Purchase Premium WordPress Plugins!</li>";
+	
+		return $string;
+	}
+	
 	
 	
 	/**
@@ -308,11 +329,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 <?
  echo  "<script type='text/javascript' src='"."../".PLUGINDIR . "/". dirname(plugin_basename (__FILE__))."/watermark.js'></script>";                        
                         echo "<script type='text/javascript'>
-                                          function image_add_watermark(){
-                                                  
-                
-                                          }
-                  
+                                          
                   
                   			jQuery(document).ready(function(){
                                               imagePreview();
@@ -429,7 +446,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Plugin Homepage</a></p>
 	<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
-	<p><a href='http://wordpress.org/support/view/plugin-reviews/bulk-watermark?rate=5'  target='_blank'>Rate and Review This Plugin</a></p>
+	<p><a href='http://wordpress.org/support/view/plugin-reviews/bulk-watermark?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></p>
 <?php $this->HtmlPrintBoxFooter(true); ?>
 
 

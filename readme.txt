@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
 
@@ -51,11 +51,16 @@ To-do:
 
 = Plugin doesn't work ... =
 
-Please specify as much information as you can to help me debug the problem. Check in your error.log if you can. Please send screenshots as well as a detailed description of the problem.
+Please specify as much information as you can to help us debug the problem. 
+Check in your error.log if you can. 
+Please send screenshots as well as a detailed description of the problem.
 
-= Error message says that I don't have GD extension installed =
 
-Contact your hosting provider and ask them to enable GD extension for your host,  GD extension is required for watermarking.
+= Error message says that I don't have GD or FreeType extension installed =
+
+Contact your hosting provider and ask them to enable GD extension for your host,  
+GD extension is required for watermarking.
+FreeType extension is required for text watermarks.
 
 
 
@@ -104,3 +109,7 @@ If we choose your testimonial or website we can link to your site and generate s
 
 = 1.4.2 =
 * added link to rate and review this plugin on WordPress.org.
+
+= 1.4.3 =
+* added plugin meta row link to rate this plugin
+* minor cleanup of old unused code

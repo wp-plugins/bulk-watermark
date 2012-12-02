@@ -6,7 +6,7 @@ class Bulk_Watermark {
 	 *
 	 * @var string
 	 */
-	public $version                 = '1.4.2';
+	public $version                 = '1.4.3';
 	
 	/**
 	 * Array with default options
@@ -14,11 +14,11 @@ class Bulk_Watermark {
 	 * @var array
 	 */
 	protected $_options             = array(
-		'show_on_upload_screen' => true,
+		//'show_on_upload_screen' => true,
 		'watermark_on'       => array(),
 		'watermark_type' =>	'text-image',
 		'watermark_text' => array(
-			'text' => '&copy; Chris Hurst',
+			'text' => '&copy; MyWebsiteAdvisor',
 			'font' => 'Rage.ttf',
 			'width' => 50,
 			'transparency' => 70,
@@ -104,7 +104,7 @@ class Bulk_Watermark {
 	/**
 	 * Plugin installation method
 	 */
-	public function activateWatermark() {
+	public function activate_watermark() {
 		// record install time
 		add_option('watermark_installed', time(), null, 'no');
 				
@@ -123,7 +123,7 @@ class Bulk_Watermark {
 	}
 	
 	
-	public function applyBulkWatermark($file_list){
+	public function apply_bulk_watermark($file_list){
 	
 		
 	
@@ -158,7 +158,7 @@ class Bulk_Watermark {
 	
 		foreach($file_list as $file_path){
 			
-			$this->doWatermark($file_path);
+			$this->do_watermark($file_path);
 			
 			$file_url =  get_option('siteurl') ."/". str_replace(ABSPATH, '', $file_path);
 				
@@ -193,7 +193,7 @@ class Bulk_Watermark {
 	 * @param string $filepath
 	 * @return boolean
 	 */
-	public function doWatermark($filepath) {
+	public function do_watermark($filepath) {
 		// get image mime type
 		$mime_type = wp_check_filetype($filepath);
 		$mime_type = $mime_type['type'];
@@ -228,7 +228,7 @@ class Bulk_Watermark {
 	
 	
 	
-	public function doWatermarkPreview(array $opt){
+	public function do_watermark_preview(array $opt){
 		$options = $this->get_options();
 		$options = $this->mergeConfArray($options, $opt);
 	
@@ -236,9 +236,6 @@ class Bulk_Watermark {
 	
 		$mime_type = wp_check_filetype($filepath);
 		$mime_type = $mime_type['type'];
-		
-		// get watermark settings
-		//$options = $this->get_options();
 
 		// get image resource
 		$image = $this->getImageResource($filepath, $mime_type);
@@ -259,16 +256,12 @@ class Bulk_Watermark {
 			
 		}
 		
-		// save watermarked image
-		//return $this->saveImageFile($image, $mime_type, $filepath);
 		// Set the content-type
 		header('Content-type: image/jpg');
 
-		// Output the image using imagepng()
-		//imagejpeg($image);
+		// Output the image using imagejpg()
 		imagejpeg($image, null, 100);
 		imagedestroy($image);
-	
 	}
 	
 	
