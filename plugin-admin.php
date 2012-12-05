@@ -326,7 +326,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 			
 				
 ?>
-<?
+<?php
  echo  "<script type='text/javascript' src='"."../".PLUGINDIR . "/". dirname(plugin_basename (__FILE__))."/watermark.js'></script>";                        
                         echo "<script type='text/javascript'>
                                           
@@ -388,7 +388,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 			
 <?php $this->HtmlPrintBoxHeader('pl_diag',__('Plugin Diagnostic Check','diagnostic'),true); ?>
 
-				<?
+				<?php
 				
 				echo "<p>Required PHP Version: 5.0+<br>";
 				echo "Current PHP Version: " . phpversion() . "</p>";
@@ -512,9 +512,9 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 						<td >
 							<fieldset>
 							<legend class="screen-reader-text"><span>Watermark Type</span></legend>
-								<input name="watermark_type" value="text-image" type="radio" <? if($watermark_type == "text-image"){echo "checked='checked'";}  ?> /> Text and Image <br />
-								<input name="watermark_type" value="text-only" type="radio" <? if($watermark_type == "text-only"){echo "checked='checked'";}  ?> /> Text Only <br />
-								<input name="watermark_type" value="image-only" type="radio" <? if($watermark_type == "image-only"){echo "checked='checked'";}  ?> />  Image Only <br />
+								<input name="watermark_type" value="text-image" type="radio" <?php if($watermark_type == "text-image"){echo "checked='checked'";}  ?> /> Text and Image <br />
+								<input name="watermark_type" value="text-only" type="radio" <?php if($watermark_type == "text-only"){echo "checked='checked'";}  ?> /> Text Only <br />
+								<input name="watermark_type" value="image-only" type="radio" <?php if($watermark_type == "image-only"){echo "checked='checked'";}  ?> />  Image Only <br />
 							</fieldset>
 						</td>
 					</tr>
@@ -643,7 +643,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	
 								
 								
-								<? 
+								<?php 
 								$fonts = $this->getFontList();
 								
 								echo "<select id='watermark_text_font' name='watermark_text[font]'>";
@@ -712,7 +712,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 
 			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Uploads Directory','watermark-directory'),false); ?>					
 				
-				<? 
+				<?php 
 					if(!isset($_POST['base_dir'])){
 						$upload_dir   = wp_upload_dir();
 						$base_dir = $upload_dir['basedir'];
