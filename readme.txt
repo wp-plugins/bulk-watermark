@@ -3,8 +3,8 @@ Name: Bulk Watermark
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
 Requires at least: 2.9
-Tested up to: 3.4.2
-Stable tag: 1.4.6
+Tested up to: 3.5
+Stable tag: 1.4.7
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
 
@@ -125,4 +125,7 @@ If we choose your testimonial or website we can link to your site and generate s
 
 = 1.4.6 =
 * fixed issue with watermarked images not displaying properly due to browser caching issues
+
+= 1.4.7 =
+* verified compatibility with WordPress v3.5
 

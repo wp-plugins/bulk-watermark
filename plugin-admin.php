@@ -734,7 +734,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 							
 						}
 					echo "</select> ";
-					echo " <input type='submit'>";
+					echo " <input type='submit' class='button-primary' >";
 					echo "</form>";
 					echo "<br>";
 					echo "<br>";
@@ -755,8 +755,8 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 						echo "</div>";
 						echo "<br>";
 						echo "<p><b><font color='red'>NOTICE: Watermarking Images with this plugin is permenant, watermarks can not be removed.  You should make a backup of your images before you apply the watermarks!</font></b></p>";
-						echo "<br>";
-						echo "<input type='submit' value='Apply Bulk Watermark'>";
+						//echo "<br>";
+						echo "<p class='submit'><input type='submit' class='button-primary' value='Apply Bulk Watermark'></p>";
 						echo "</form>";
 					}
 				?>
