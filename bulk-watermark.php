@@ -6,7 +6,7 @@ class Bulk_Watermark {
 	 *
 	 * @var string
 	 */
-	public $version                 = '1.4.5';
+	public $version                 = '1.4.6';
 	
 	/**
 	 * Array with default options
@@ -163,7 +163,7 @@ class Bulk_Watermark {
 			$file_url =  get_option('siteurl') ."/". str_replace(ABSPATH, '', $file_path);
 				
 			echo "$file_path Done!<br>";
-			echo "<img src='$file_url' style='max-width:800px;'><br>";
+			echo "<img src='$file_url"."?".filemtime($file_path)."' style='max-width:800px;'><br>";
 	
 			ob_flush();
 			flush();

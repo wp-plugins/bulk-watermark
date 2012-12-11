@@ -274,7 +274,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 				//$imgUrl = $base_url . "/" . $file->getFilename();
 				$imgUrl =  get_option('siteurl') ."/". str_replace(ABSPATH, '', $imgPath);
 				
-				$file_list_output[] = "<p><input name='bulk_file_list[]' value='$imgPath' type='checkbox' checked='checked'> <a class='watermark_preview' href='$imgUrl' target='_blank'>" . $file->getFilename() . "</a></p>";
+				$file_list_output[] = "<p><input name='bulk_file_list[]' value='$imgPath' type='checkbox' checked='checked'> <a class='watermark_preview' href='$imgUrl"."?".filemtime($imgPath)."' target='_blank'>" . $file->getFilename() . "</a></p>";
 				
 		  	}
 		}
