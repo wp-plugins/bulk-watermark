@@ -89,7 +89,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	public function admin_menu() {		
 		// add option in admin menu, for setting details on watermarking
 		global $bulk_watermark_admin_page;
-		$bulk_watermark_admin_page = add_options_page('Bulk Watermark Plugin Options', 'Bulk Watermark', 8, __FILE__, array(&$this, 'optionsPage'));
+		$bulk_watermark_admin_page = add_options_page('Bulk Watermark Plugin Options', 'Bulk Watermark', 'manage_options', __FILE__, array(&$this, 'optionsPage'));
 
 		add_action('admin_print_styles-' . $bulk_watermark_admin_page,     array(&$this, 'installStyles'));
 	}
@@ -274,7 +274,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 				//$imgUrl = $base_url . "/" . $file->getFilename();
 				$imgUrl =  get_option('siteurl') ."/". str_replace(ABSPATH, '', $imgPath);
 				
-				$file_list_output[] = "<p><input name='bulk_file_list[]' value='$imgPath' type='checkbox' checked='checked'> <a class='watermark_preview' href='$imgUrl"."?".filemtime($imgPath)."' target='_blank'>" . $file->getFilename() . "</a></p>";
+				$file_list_output[] = "<p><input name='bulk_file_list[]' class='bulk_watermark_file_select' value='$imgPath' type='checkbox' > <a class='watermark_preview' href='$imgUrl"."?".filemtime($imgPath)."' target='_blank'>" . $file->getFilename() . "</a></p>";
 				
 		  	}
 		}
@@ -389,6 +389,8 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 <?php $this->HtmlPrintBoxHeader('pl_diag',__('Plugin Diagnostic Check','diagnostic'),true); ?>
 
 				<?php
+				
+				echo "<p>Plugin Version: $this->version</p>";
 				
 				echo "<p>Required PHP Version: 5.0+<br>";
 				echo "Current PHP Version: " . phpversion() . "</p>";
@@ -727,7 +729,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 						echo "<option value=''>Select a Directory...</option>";
 						foreach($dir_info as $dir){
 							$selected = "";
-							if($_POST['base_dir'] == $dir){
+							if(isset($_POST['base_dir']) && $_POST['base_dir'] == $dir){
 								$selected = "selected='selected'";
 							}
 							echo "<option $selected>$dir</option>";
@@ -756,8 +758,25 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 						echo "<br>";
 						echo "<p><b><font color='red'>NOTICE: Watermarking Images with this plugin is permenant, watermarks can not be removed.  You should make a backup of your images before you apply the watermarks!</font></b></p>";
 						//echo "<br>";
-						echo "<p class='submit'><input type='submit' class='button-primary' value='Apply Bulk Watermark'></p>";
+						echo "<p class='submit'>";
+						echo "<input type='button' class='checkall button' value='Select All' onclick='select_all_image_sizes()'>  ";
+						echo "<input type='submit' class='button-primary' value='Apply Bulk Watermark'>";
+						echo "</p>";
 						echo "</form>";
+						
+						echo "<script>
+						
+							function select_all_image_sizes(){
+										if('Select All' == jQuery('.checkall').val()){
+											jQuery('.bulk_watermark_file_select').attr('checked', 'checked');
+											jQuery('.checkall').val('Unselect All');
+										}else{
+											jQuery('.bulk_watermark_file_select').removeAttr('checked');
+											jQuery('.checkall').val('Select All');  
+										}
+									}
+							</script>";
+						
 					}
 				?>
 				

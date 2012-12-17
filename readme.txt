@@ -4,7 +4,8 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
 Requires at least: 2.9
 Tested up to: 3.5
-Stable tag: 1.4.7
+Stable tag: 1.5
+Donate link: http://MyWebsiteAdvisor.com/donations
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
 
@@ -89,43 +90,61 @@ If we choose your testimonial or website we can link to your site and generate s
 
 == Changelog ==
 
+= 1.5 =
+* updated readme file.
+* fixed several issues causing warnings and notices in debug.log
+* added plugin version to plugin diagnostic screen.
+* added select all/deselect all button for selecting which files to add watermarks to.
 
-= 1.0 =
-* Initial release
 
-= 1.1 =
-* re-arranged layout of admin page
-* changed behavior of directory selector so it does not automatically list all files in uploads root which caused issues on sites with very large numbers of files
+= 1.4.7 =
+* verified compatibility with WordPress v3.5
 
-= 1.2 =
-* added more debug info to help with troubleshooting
+= 1.4.6 =
+* fixed issue with watermarked images not displaying properly due to browser caching issues
 
-= 1.3 =
-* added more debug info, updated links, added basic plugin help menu
+= 1.4.5 =
+* fixed several improper opening php tags
 
-= 1.4 =
-* updated contextual help menu system, added faqs
-* fixed broken links
-
-= 1.4.1 =
-* updated plugin activation php version check which was causing out of place errors.
-
-= 1.4.2 =
-* added link to rate and review this plugin on WordPress.org.
+= 1.4.4 =
+* added better screenshots to demonstrate how the plugin works
 
 = 1.4.3 =
 * added plugin meta row link to rate this plugin
 * minor cleanup of old unused code
 
-= 1.4.4 =
-* added better screenshots to demonstrate how the plugin works
+= 1.4.2 =
+* added link to rate and review this plugin on WordPress.org.
 
-= 1.4.5 =
-* fixed several improper opening php tags
+= 1.4.1 =
+* updated plugin activation php version check which was causing out of place errors.
 
-= 1.4.6 =
-* fixed issue with watermarked images not displaying properly due to browser caching issues
+= 1.4 =
+* updated contextual help menu system, added faqs
+* fixed broken links
 
-= 1.4.7 =
-* verified compatibility with WordPress v3.5
+
+= 1.3 =
+* added more debug info, updated links, added basic plugin help menu
+
+
+= 1.2 =
+* added more debug info to help with troubleshooting
+
+
+= 1.1 =
+* re-arranged layout of admin page
+* changed behavior of directory selector so it does not automatically list all files in uploads root which caused issues on sites with very large numbers of files
+
+
+= 1.0 =
+* Initial release
+
+
+
+
+
+
+
+
 
