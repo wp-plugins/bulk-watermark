@@ -91,7 +91,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 		global $bulk_watermark_admin_page;
 		$bulk_watermark_admin_page = add_options_page('Bulk Watermark Plugin Options', 'Bulk Watermark', 'manage_options', __FILE__, array(&$this, 'optionsPage'));
 
-		add_action('admin_print_styles-' . $bulk_watermark_admin_page,     array(&$this, 'installStyles'));
+		//add_action('admin_print_styles-' . $bulk_watermark_admin_page,     array(&$this, 'installStyles'));
 	}
 	
 	
@@ -165,7 +165,7 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 	 * Include styles used by Bulk Watermark Plugin
 	 */
 	public function installStyles() {
-		wp_enqueue_style('bulk-watermark', WP_PLUGIN_URL . $this->_plugin_dir . 'style.css');
+		//wp_enqueue_style('bulk-watermark', WP_PLUGIN_URL . $this->_plugin_dir . 'style.css');
 	}
 	
 
@@ -263,11 +263,14 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 		$base_dir = $upload_dir['basedir'];
 		$base_url = $upload_dir['baseurl'];
 			
+		$allowed_types= array('jpg', 'gif', 'png');
 		
 		$iterator = new RecursiveDirectoryIterator($dir);
 		foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
 			$file_info = pathinfo($file->getFilename());
-			if($file->isFile() && strtolower($file_info['extension']) == 'jpg'){ //create list of files
+			$file_ext = strtolower($file_info['extension']);
+			
+			if($file->isFile() && in_array($file_ext, $allowed_types)){ //create list of files
 			
 				
 				$imgPath = $file->getPath()."/".$file->getFilename();
@@ -346,11 +349,29 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 
 <style>
 
+.form-table{
+	clear:left;
+}
+
 .fb_edge_widget_with_comment {
 	position: absolute;
 	top: 0px;
 	right: 200px;
 }
+
+#watermark_preview{
+	position:absolute;
+	border:1px solid #ccc;
+	background:#333;
+	padding:5px;
+	display:none;									 
+	color:#fff;
+}
+
+#watermark_preview img{
+	 max-width:300px;  
+	 max-height:300px;                                         
+}   
 
 </style>
 
@@ -435,9 +456,11 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 				
 				echo "<p>Peak Memory Use: " . number_format(memory_get_peak_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
 				
-				$lav = sys_getloadavg();
-				echo "<p>Server Load Average: ".$lav[0].", ".$lav[1].", ".$lav[2]."</p>";
-				
+				if(function_exists('sys_getloadavg')){
+					$lav = sys_getloadavg();
+					echo "<p>Server Load Average: ".$lav[0].", ".$lav[1].", ".$lav[2]."</p>";
+				}	
+					
 				?>
 
 <?php $this->HtmlPrintBoxFooter(true); ?>
@@ -514,9 +537,9 @@ class Bulk_Watermark_Admin extends Bulk_Watermark {
 						<td >
 							<fieldset>
 							<legend class="screen-reader-text"><span>Watermark Type</span></legend>
-								<input name="watermark_type" value="text-image" type="radio" <?php if($watermark_type == "text-image"){echo "checked='checked'";}  ?> /> Text and Image <br />
-								<input name="watermark_type" value="text-only" type="radio" <?php if($watermark_type == "text-only"){echo "checked='checked'";}  ?> /> Text Only <br />
-								<input name="watermark_type" value="image-only" type="radio" <?php if($watermark_type == "image-only"){echo "checked='checked'";}  ?> />  Image Only <br />
+								<label><input name="watermark_type" value="text-image" type="radio" <?php if($watermark_type == "text-image"){echo "checked='checked'";}  ?> /> Text and Image </label><br />
+								<label><input name="watermark_type" value="text-only" type="radio" <?php if($watermark_type == "text-only"){echo "checked='checked'";}  ?> /> Text Only </label><br />
+								<label><input name="watermark_type" value="image-only" type="radio" <?php if($watermark_type == "image-only"){echo "checked='checked'";}  ?> />  Image Only </label><br />
 							</fieldset>
 						</td>
 					</tr>

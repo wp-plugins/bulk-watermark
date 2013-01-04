@@ -6,7 +6,7 @@ class Bulk_Watermark {
 	 *
 	 * @var string
 	 */
-	public $version                 = '1.5';
+	public $version                 = '1.5.1';
 	
 	/**
 	 * Array with default options
@@ -152,7 +152,7 @@ class Bulk_Watermark {
 		<?php
 		
 	
-		set_time_limit(120); 
+		set_time_limit(0); 
 		
 		$start_time = $this->microtime_float();
 	

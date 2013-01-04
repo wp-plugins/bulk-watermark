@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
 Requires at least: 2.9
 Tested up to: 3.5
-Stable tag: 1.5
+Stable tag: 1.5.1
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
@@ -89,6 +89,12 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 1.5.1 =
+* added label elements around checkboxes to make the label text clickable.
+* added function exists check for the sys_getloadavg function so it does not cause fatal errors on MS Windows Servers
+* added ability to watermark png and gif images.
+
 
 = 1.5 =
 * updated readme file.
