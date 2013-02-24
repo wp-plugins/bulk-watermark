@@ -12,18 +12,19 @@ this.imagePreview = function(){
 		this.t = this.title;
 		this.title = "";	
 		var c = (this.t != "") ? "<br/>" + this.t : "";
-		jQuery("body").append("<p id='watermark_preview'><img src='"+ this.href +"' alt='Image preview' />"+ c +"</p>");								 
-		jQuery("#watermark_preview")
+		jQuery("div#apply_watermark").append("<p id='watermark_preview_popup'><img src='"+ this.href +"' alt='Image preview' />"+ c +"</p>");								 
+		jQuery("p#watermark_preview_popup")
+			
 			.css("top",(e.pageY - xOffset) + "px")
 			.css("left",(e.pageX + yOffset) + "px")
 			.fadeIn("fast");						
     },
 	function(){
 		this.title = this.t;	
-		jQuery("#watermark_preview").remove();
+		jQuery("p#watermark_preview_popup").remove();
     });	
 	jQuery("a.watermark_preview").mousemove(function(e){
-		jQuery("#watermark_preview")
+		jQuery("#watermark_preview_popup")
 			.css("top",(e.pageY - xOffset) + "px")
 			.css("left",(e.pageX + yOffset) + "px");
 	});			

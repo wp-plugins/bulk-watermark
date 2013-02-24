@@ -2,9 +2,9 @@
 Name: Bulk Watermark
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
-Requires at least: 2.9
-Tested up to: 3.5
-Stable tag: 1.5.1
+Requires at least: 3.3
+Tested up to: 3.5.1
+Stable tag: 1.6.0
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
@@ -17,6 +17,11 @@ The user friendly settings page allows for control over the appearance of your w
 You can set your watermarks to always be a specific percentage of the target image.  
 This plugin will add the watermarks to ALL of the images in your wordpress uploads directory.
 Please BACK UP all of your uploads via FTP before using this plugin!
+
+
+Check out the [Bulk Watermark Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1):
+
+http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1
 
 
 
@@ -33,9 +38,11 @@ If we choose your testimonial or website we can link to your site and generate s
 
 Requirements:
 
-* PHP5
+* PHP v5.0+
+* WordPress v3.3+
 * GD extension for PHP
 * FreeType extension for PHP
+
 
 
 To-do:
@@ -45,7 +52,14 @@ To-do:
 
 1. Upload `bulk-watermark/` to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Go to Bulk Watermark Ultra settings and enable Bulk Watermark Ultra Plugin.
+3. Go to Bulk Watermark settings and enable Bulk Watermark Plugin.
+
+
+Check out the [Bulk Watermark Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1):
+
+http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1
+
+
 
 
 == Frequently Asked Questions ==
@@ -78,6 +92,8 @@ Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/test
 If we choose your testimonial or website we can link to your site and generate some free traffic for you!
 
 
+
+
 == Screenshots ==
 
 1. Finished Example Image
@@ -88,7 +104,20 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 
+
+
 == Changelog ==
+
+= 1.6.0 =
+* rebuilt plugin using settings API
+* added tabbed navingation for plugin settings and tools
+* updated readme file, due to the add_help_tab() function, the plugin requires at least WordPress version 3.3
+* added notification about required version if an older version of WP is installed
+* added tutorial video to plugin
+* fixed issues with the plugin reading uploads directory path correctly
+* updated screenshots
+
+
 
 = 1.5.1 =
 * added label elements around checkboxes to make the label text clickable.
@@ -101,6 +130,7 @@ If we choose your testimonial or website we can link to your site and generate s
 * fixed several issues causing warnings and notices in debug.log
 * added plugin version to plugin diagnostic screen.
 * added select all/deselect all button for selecting which files to add watermarks to.
+
 
 
 = 1.4.7 =
