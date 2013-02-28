@@ -113,20 +113,6 @@ class Bulk_Watermark_Tools{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public function do_watermark_preview(){
 
 		$options = $this->opt;
