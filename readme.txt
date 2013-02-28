@@ -4,8 +4,8 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.6.0
-Donate link: http://MyWebsiteAdvisor.com/donations
+Stable tag: 1.6.1
+Donate link: http://MyWebsiteAdvisor.com/donations/
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
 
@@ -19,21 +19,29 @@ This plugin will add the watermarks to ALL of the images in your wordpress uploa
 Please BACK UP all of your uploads via FTP before using this plugin!
 
 
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
+watermark features including:
+
+* Adjustable Watermark Positions
+* Higher Quality Watermarks
+* Priority Support
+
+
 Check out the [Bulk Watermark Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1):
 
 http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1
 
 
 
-Developer Website: http://MyWebsiteAdvisor.com
+Developer Website: http://MyWebsiteAdvisor.com/
+
+Plugin Support: http://MyWebsiteAdvisor.com/support/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/bulk-watermark/
 
 Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-watermark-tutorial/
 
-We are looking for testimonials and live examples of our plugins on your website!  
-Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials  
-If we choose your testimonial or website we can link to your site and generate some free traffic for you!
+
 
 
 Requirements:
@@ -80,16 +88,53 @@ FreeType extension is required for text watermarks.
 
 
 
+= How can I Adjust the Location of the Watermarks? = 
 
-Developer Website: http://MyWebsiteAdvisor.com
+We have a premium version of this plugin that adds the capability to adjust the locations of the watermarks.
+The positions can be adjusted both vertically and horizontally.
+
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
+watermark features including:
+
+* Adjustable Watermark Positions
+* Higher Quality Watermarks
+* Priority Support
+
+
+
+= How do I generate the Highest Quality Watermarks? = 
+
+We recommend that your watermark image be roughly the same width as the largest images you plan to watermark.
+That way the watermark image will be scaled down, which will work better than making the watermark image larger in order to fit.
+
+We also have a premium version of this plugin that adds the capability to resample the watermark image, rather than simply resize it.
+This results in significantly better looking watermarks.
+
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
+watermark features including:
+
+* Adjustable Watermark Positions
+* Higher Quality Watermarks
+* Priority Support
+
+
+
+Check out the [Bulk Watermark Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1):
+
+http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1
+
+
+
+
+
+
+Developer Website: http://MyWebsiteAdvisor.com/
+
+Plugin Support: http://MyWebsiteAdvisor.com/support/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/bulk-watermark/
 
 Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-watermark-tutorial/
-
-We are looking for testimonials and live examples of our plugins on your website!
-Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials
-If we choose your testimonial or website we can link to your site and generate some free traffic for you!
 
 
 
@@ -107,6 +152,11 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 1.6.1 =
+* updated readme file
+* added plugin upgrades tab to settings page
+
 
 = 1.6.0 =
 * rebuilt plugin using settings API

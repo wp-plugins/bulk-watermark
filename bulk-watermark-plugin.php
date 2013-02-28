@@ -6,12 +6,12 @@ class Bulk_Watermark_Plugin{
 
 
 	//plugin version number
-	private $version = "1.6.0";
+	private $version = "1.6.1";
 	
 	private $debug = false;
 
 
-	//holds simple security settings page class
+	//holds settings page class
 	private $settings_page;
 	
 	//holds watermark tools
@@ -30,24 +30,32 @@ class Bulk_Watermark_Plugin{
 	//will be used as option name to save all options
 	private $setting_name = "bulk-watermark-settings";
 	
+	private $youtube_id = "XkFXBjfzw2I";
 
 	
 	//holds plugin options
 	private $opt = array();
 
 
-
+	public $plugin_path;
+	public $plugin_dir;
+	public $plugin_url;
+	
 
 
 	//initialize the plugin class
 	public function __construct() {
 	
+		$this->plugin_path = DIRECTORY_SEPARATOR . str_replace(basename(__FILE__), null, plugin_basename(__FILE__));
+		$this->plugin_dir = WP_PLUGIN_DIR . $this->plugin_path;
+		$this->plugin_url = WP_PLUGIN_URL . $this->plugin_path;
+		
 		$this->opt = get_option($this->setting_name);
 		
 		$this->tools = new Bulk_Watermark_Tools;
 		$this->tools->opt = $this->opt;
 		
-		if(isset($_GET['action']) && "watermark_preview" == $_GET['action']){
+		if(isset($_GET['action']) && isset($_GET['page']) && "watermark_preview" == $_GET['action'] && "bulk-watermark-settings" == $_GET['page'] ){
 			$this->tools->do_watermark_preview();
 			die();
 		}
@@ -333,9 +341,6 @@ class Bulk_Watermark_Plugin{
 			
 			echo "<h2>".$this->plugin_title." Plugin Settings</h2>";
 			
-			//$this->show_backup_manager_link();
-			//$this->show_do_backup_button();
-			
 			$this->settings_page->show_tab_nav();
 			
 			echo '<div id="poststuff" class="metabox-holder has-right-sidebar">';
@@ -353,10 +358,6 @@ class Bulk_Watermark_Plugin{
 						
 						$this->settings_page->show_settings_forms();
 						
-						//$this->show_do_backup_button();
-						
-						//$this->show_ftp_tools();
-						
 					echo '</div>';
 				echo '</div>';
 				
@@ -372,6 +373,8 @@ class Bulk_Watermark_Plugin{
 		
         $this->page_menu = add_options_page( $this->plugin_title, $this->plugin_title, 'manage_options',  $this->setting_name, array($this, 'plugin_settings_page') );
     }
+
+
 
 
 	public function admin_help($contextual_help, $screen_id, $screen){
@@ -404,7 +407,8 @@ class Bulk_Watermark_Plugin{
 		}
 		</style>";
 		
-			$video_code .= '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/XkFXBjfzw2I?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe></div>';
+			$video_id = $this->youtube_id;
+			$video_code .= '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/'.$video_id.'?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe></div>';
 
 			$screen->add_help_tab(array(
 				'id' => 'tutorial-video',
@@ -417,7 +421,13 @@ class Bulk_Watermark_Plugin{
 				'title' => "Plugin Support",
 				'content' => "<h2>{$this->plugin_title} Support</h2><p>For {$this->plugin_title} Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
 			));
-			
+	
+	
+			$screen->add_help_tab(array(
+				'id' => 'upgrade_plugin',
+				'title' => __( 'Plugin Upgrades', $this->plugin_name ),
+				'content' => $this->get_plugin_upgrades()		
+			));		
 			
 
 			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
@@ -604,8 +614,121 @@ class Bulk_Watermark_Plugin{
 			'callback' => array(&$this, 'bulk_watermark_manager')
 		);
 		$this->settings_page->add_section( $apply_watermark );
+		
+		$apply_watermark = array(
+			'id' => 'upgrade_plugin',
+			'title' => __( 'Plugin Upgrades', $this->plugin_name ),
+			'callback' => array(&$this, 'show_plugin_upgrades')
+		);
+		$this->settings_page->add_section( $apply_watermark );
 	}
 	
+
+
+	public function show_plugin_tutorual(){
+	
+		echo "<style>
+		.videoWrapper {
+			position: relative;
+			padding-bottom: 56.25%; /* 16:9 */
+			padding-top: 25px;
+			height: 0;
+		}
+		.videoWrapper iframe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+		</style>";
+
+		$video_id = $this->youtube_id;
+		echo sprintf( '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/%1$s?rel=0&vq=hd720" frameborder="0" allowfullscreen ></iframe></div>', $video_id);
+		
+	
+	}
+	
+	
+	public function get_plugin_upgrades(){
+	
+		ob_start();
+		$this->show_plugin_upgrades();
+		return ob_get_clean();	
+	}
+
+
+	public function show_plugin_upgrades(){
+		
+		//bulk watermark ultra
+		$html = "</form><h2>Upgrade to Bulk Watermark Ultra Today!</h2>";
+		
+		$html .= "<style>
+			ul.upgrade_features li { list-style-type: disc; }
+			ul.upgrade_features  { margin-left:30px;}
+		</style>";
+		
+		$html .= "<script>
+		
+			function  sig_watermark_upgrade(){
+        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/signature-watermark-ultra/');
+        		return false;
+			}
+		
+			function  bulk_watermark_upgrade(){
+        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/');
+        		return false;
+			}
+			
+			function compare_watermark_plugins(){
+        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/watermark-plugins-for-wordpress/');
+        		return false				
+			}
+			
+			
+		</script>";
+		
+		
+		$html .= "<b>Premium Features include:</b>";
+		
+		$html .= "<ul class='upgrade_features'>";
+		$html .= "<li>Fully Adjustable Text and Image Watermark Positions</li>";
+		$html .= "<li>Higher Quality Watermarks</li>";
+		$html .= "<li>Priority Support</li>";
+		$html .= "</ul>";
+		
+		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
+		$html .= "<p class='submit'><input type='submit' class='button-primary' value='Upgrade to Bulk Watermark Ultra &raquo;' onclick='return bulk_watermark_upgrade()'></p>";
+		$html .=  "</div>";
+
+		$html .=  "<hr/>";
+
+		//signature watermark ultra
+		$html .= "<h2>Also Try Signature Watermark Ultra!</h2>";
+		$html .= "<b>Signature Watermark can produce the  exact same watermarks as Bulk Watermark, however it works differently.  <br>Signature Watermark Plugin adds watermarks to each new image as they are uploaded.</b>";
+		
+		$html .= "<p><b>Premium Features include:</b></p>";
+		
+		$html .= "<ul class='upgrade_features'>";
+		$html .= "<li>Fully Adjustable Text and Image Watermark Positions</li>";
+		$html .= "<li>Manually watermark images using the WordPress Media Library</li>";	
+		$html .= "<li>Higher Quality Watermarks</li>";
+		$html .= "<li>Priority Support</li>";
+		$html .= "</ul>";
+
+		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
+		$html .= "<p class='submit'><input type='submit' class='button-primary' value='Upgrade to Signature Watermark Ultra &raquo;' onclick='return sig_watermark_upgrade()'></p>";
+		$html .=  "</div>";
+		
+		$html .=  "<hr/>";
+
+		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
+		$html .= "<b><p class='submit'><input type='submit' class='button-primary' value='Click Here to Compare All of Our Watermark Plugins &raquo;' onclick='return compare_watermark_plugins()'></p></b>";
+		$html .=  "</div>";
+		
+		echo $html;
+	}
+
 
 
 
@@ -713,9 +836,14 @@ class Bulk_Watermark_Plugin{
 	
 
 	public function show_watermark_preview(){
-		$img_url = admin_url()."options-general.php?page=bulk-watermark-settings&action=watermark_preview";
+		$img_url = admin_url()."options-general.php?page=".$this->setting_name."&action=watermark_preview";
 		echo "<img src=$img_url width='100%'>";
+		echo "<p><strong>You can customize the preview image by replacing the image named ";
+		echo " <a href='".$this->plugin_url."example.jpg' target='_blank'>'example.jpg'</a> in the plugin directory.</strong></p>";
 	}
+
+
+
  
 
 	// displays the plugin options array
@@ -729,29 +857,7 @@ class Bulk_Watermark_Plugin{
 
 
 
-	public function show_plugin_tutorual(){
-	
-		echo "<style>
-		.videoWrapper {
-			position: relative;
-			padding-bottom: 56.25%; /* 16:9 */
-			padding-top: 25px;
-			height: 0;
-		}
-		.videoWrapper iframe {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-		}
-		</style>";
 
-		$video_id = "XkFXBjfzw2I";
-		echo sprintf( '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/%1$s?rel=0&vq=hd720" frameborder="0" allowfullscreen ></iframe></div>', $video_id);
-		
-	
-	}
 
 
 
@@ -763,6 +869,8 @@ class Bulk_Watermark_Plugin{
 		
 		return $links;
 	}
+	
+	
 	
 	/**
 	 * Add links on installed plugin list
@@ -781,6 +889,7 @@ class Bulk_Watermark_Plugin{
 		
 		return $links;
 	}
+	
 	
 	
 	public function display_support_us(){
