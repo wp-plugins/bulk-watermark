@@ -6,7 +6,7 @@ class Bulk_Watermark_Plugin{
 
 
 	//plugin version number
-	private $version = "1.6.1";
+	private $version = "1.6.2";
 	
 	private $debug = false;
 
@@ -451,6 +451,7 @@ class Bulk_Watermark_Plugin{
 			echo "<p>Required PHP Version: 5.0+<br>";
 			echo "Current PHP Version: " . phpversion() . "</p>";
 			
+			
 
 			$gdinfo = gd_info();
 		
@@ -511,7 +512,7 @@ class Bulk_Watermark_Plugin{
 	
 		$plugin_resources = "<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Plugin Homepage</a></p>
 			<p><a href='http://mywebsiteadvisor.com/learning/video-tutorials/bulk-watermark-tutorial/'  target='_blank'>Plugin Tutorial</a></p>
-			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Plugin Support</a></p>
+			<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
 			<p><a href='http://wordpress.org/support/view/plugin-reviews/bulk-watermark?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></p>";
 	
@@ -615,12 +616,12 @@ class Bulk_Watermark_Plugin{
 		);
 		$this->settings_page->add_section( $apply_watermark );
 		
-		$apply_watermark = array(
+		$upgrade_plugin = array(
 			'id' => 'upgrade_plugin',
 			'title' => __( 'Plugin Upgrades', $this->plugin_name ),
 			'callback' => array(&$this, 'show_plugin_upgrades')
 		);
-		$this->settings_page->add_section( $apply_watermark );
+		$this->settings_page->add_section( $upgrade_plugin );
 	}
 	
 
@@ -669,16 +670,29 @@ class Bulk_Watermark_Plugin{
 		</style>";
 		
 		$html .= "<script>
-		
-			function  sig_watermark_upgrade(){
-        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/signature-watermark-ultra/');
-        		return false;
-			}
-		
+				
 			function  bulk_watermark_upgrade(){
         		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/');
         		return false;
 			}
+			
+			
+			function  try_sig_watermark(){
+        		window.open('http://wordpress.org/extend/plugins/signature-watermark/');
+        		return false;
+			}
+					
+						
+			function  sig_watermark_learn_more(){
+        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/signature-watermark/');
+        		return false;
+			}
+		
+			function  bulk_watermark_learn_more(){
+        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/');
+        		return false;
+			}
+			
 			
 			function compare_watermark_plugins(){
         		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/watermark-plugins-for-wordpress/');
@@ -693,37 +707,34 @@ class Bulk_Watermark_Plugin{
 		
 		$html .= "<ul class='upgrade_features'>";
 		$html .= "<li>Fully Adjustable Text and Image Watermark Positions</li>";
-		$html .= "<li>Higher Quality Watermarks</li>";
-		$html .= "<li>Priority Support</li>";
+		$html .= "<li>Highest Quality Watermarks using Image Re-sampling rather than Re-sizing</li>";
+		$html .= "<li>Priority Support License</li>";
 		$html .= "</ul>";
 		
 		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
-		$html .= "<p class='submit'><input type='submit' class='button-primary' value='Upgrade to Bulk Watermark Ultra &raquo;' onclick='return bulk_watermark_upgrade()'></p>";
+		$html .= "<p class='submit'>";
+		$html .= "<input type='submit' class='button-primary' value='Upgrade to Bulk Watermark Ultra &raquo;' onclick='return bulk_watermark_upgrade()'> &nbsp;";
+		$html .= "<input type='submit' class='button-secondary' value='Learn More &raquo;' onclick='return bulk_watermark_learn_more()'>";
+		$html .= "</p>";
 		$html .=  "</div>";
 
 		$html .=  "<hr/>";
 
-		//signature watermark ultra
-		$html .= "<h2>Also Try Signature Watermark Ultra!</h2>";
-		$html .= "<b>Signature Watermark can produce the  exact same watermarks as Bulk Watermark, however it works differently.  <br>Signature Watermark Plugin adds watermarks to each new image as they are uploaded.</b>";
+		//signature watermark 
+		$html .= "<h2>Also Try Signature Watermark!</h2>";
+		$html .= "<b>Signature Watermark can produce the exact same watermarks as Bulk Watermark, however it works differently.</b><br>Signature Watermark Plugin adds watermarks to each new image as they are uploaded.<br>Bulk Watermark Plugin adds watermarks to images which have already been uploaded to your Media Library.</b>";
 		
-		$html .= "<p><b>Premium Features include:</b></p>";
-		
-		$html .= "<ul class='upgrade_features'>";
-		$html .= "<li>Fully Adjustable Text and Image Watermark Positions</li>";
-		$html .= "<li>Manually watermark images using the WordPress Media Library</li>";	
-		$html .= "<li>Higher Quality Watermarks</li>";
-		$html .= "<li>Priority Support</li>";
-		$html .= "</ul>";
-
 		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
-		$html .= "<p class='submit'><input type='submit' class='button-primary' value='Upgrade to Signature Watermark Ultra &raquo;' onclick='return sig_watermark_upgrade()'></p>";
+		$html .= "<p class='submit'>";
+		$html .= "<input type='submit' class='button-primary' value='Try Signature Watermark &raquo;' onclick='return try_sig_watermark()'> &nbsp;";
+		$html .= "<input type='submit' class='button-secondary' value='Learn More &raquo;' onclick='return sig_watermark_learn_more()'>";
+		$html .= "</p>";
 		$html .=  "</div>";
 		
 		$html .=  "<hr/>";
 
 		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
-		$html .= "<b><p class='submit'><input type='submit' class='button-primary' value='Click Here to Compare All of Our Watermark Plugins &raquo;' onclick='return compare_watermark_plugins()'></p></b>";
+		$html .= "<p class='submit'><input type='submit' class='button-primary' value='Click Here to Compare All of Our Watermark Plugins &raquo;' onclick='return compare_watermark_plugins()'></p>";
 		$html .=  "</div>";
 		
 		echo $html;
@@ -766,7 +777,8 @@ class Bulk_Watermark_Plugin{
 			$upload_dir   = wp_upload_dir();
 			$base_dir = $upload_dir['basedir'];
 		}else{
-			$base_dir = $_SERVER['DOCUMENT_ROOT'] . $_POST['base_dir'];
+			//$base_dir = $_SERVER['DOCUMENT_ROOT'] . $_POST['base_dir'];
+			$base_dir = $_POST['base_dir'];
 		}
 		
 		$dir_info = $this->tools->list_directories($base_dir);
@@ -791,7 +803,8 @@ class Bulk_Watermark_Plugin{
 		if(isset($_POST['base_dir']) and $_POST['base_dir'] != ''){
 			$file_info = $this->tools->list_files($base_dir);
 		
-			echo "<b>" . count($file_info) . "</b> files found in: <b>" . str_replace($_SERVER['DOCUMENT_ROOT'], '', $base_dir) . "</b><br>";
+			//echo "<b>" . count($file_info) . "</b> files found in: <b>" . str_replace($_SERVER['DOCUMENT_ROOT'], '', $base_dir) . "</b><br>";
+			echo "<b>" . count($file_info) . "</b> files found in: <b>" .  $base_dir . "</b><br>";
 			echo "<br>";
 			
 			echo "<form method='post'>";

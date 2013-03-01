@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
@@ -22,9 +22,9 @@ Please BACK UP all of your uploads via FTP before using this plugin!
 <a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
 watermark features including:
 
-* Adjustable Watermark Positions
-* Higher Quality Watermarks
-* Priority Support
+* Fully Adjustable Text and Image Watermark Positions
+* Highest Quality Watermarks using Image Re-sampling rather than Re-sizing
+* Priority Support License
 
 
 Check out the [Bulk Watermark Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1):
@@ -79,11 +79,20 @@ Check in your error.log if you can.
 Please send screenshots as well as a detailed description of the problem.
 
 
+
 = Error message says that I don't have GD or FreeType extension installed =
 
 Contact your hosting provider and ask them to enable GD extension for your host,  
 GD extension is required for watermarking.
 FreeType extension is required for text watermarks.
+
+
+
+
+= Error message says that I need to enable the allow_url_fopen option =
+
+Contact your hosting provider and ask them to enable allow_url_fopen, most likely in your php.ini  
+It may be necessary to create a php.ini file inside of the wp-admin directory to enable the allow_url_fopen option.
 
 
 
@@ -96,9 +105,10 @@ The positions can be adjusted both vertically and horizontally.
 <a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
 watermark features including:
 
-* Adjustable Watermark Positions
-* Higher Quality Watermarks
-* Priority Support
+* Fully Adjustable Text and Image Watermark Positions
+* Highest Quality Watermarks using Image Re-sampling rather than Re-sizing
+* Priority Support License
+
 
 
 
@@ -113,9 +123,9 @@ This results in significantly better looking watermarks.
 <a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
 watermark features including:
 
-* Adjustable Watermark Positions
-* Higher Quality Watermarks
-* Priority Support
+* Fully Adjustable Text and Image Watermark Positions
+* Highest Quality Watermarks using Image Re-sampling rather than Re-sizing
+* Priority Support License
 
 
 
@@ -152,6 +162,13 @@ Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-waterm
 
 
 == Changelog ==
+
+= 1.6.2 =
+* updated the watermark application system to resolve issues with locating the correct dicectory.
+* updated support links
+* updated readme file
+* updated plugin upgrades information
+
 
 = 1.6.1 =
 * updated readme file
