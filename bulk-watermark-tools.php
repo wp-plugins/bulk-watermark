@@ -113,20 +113,6 @@ class Bulk_Watermark_Tools{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public function do_watermark_preview(){
 
 		$options = $this->opt;
@@ -410,15 +396,19 @@ class Bulk_Watermark_Tools{
 		$base_dir = $upload_dir['basedir'];
 		$base_url = $upload_dir['baseurl'];
 			
-		$pattern = "#".$_SERVER['DOCUMENT_ROOT']."#";
-		$dir_list_output[] = preg_replace($pattern, '', $base_dir, 1);
-						
+		//$pattern = "#".$_SERVER['DOCUMENT_ROOT']."#";
+		//$dir_list_output[] = preg_replace($pattern, '', $base_dir, 1);
+		$dir_list_output[] = $base_dir;
+				
+		//$flags = FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS;		
 		$iterator = new RecursiveDirectoryIterator($base_dir);
+		
 		foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
 			$file_info = pathinfo($file->getFilename());
 			if ( !$file->isFile() && is_numeric($file->getFilename()) ) { //create list of directories
 			
-				$dirPath = preg_replace($pattern, '', $file->getPathname(), 1);
+				//$dirPath = preg_replace($pattern, '', $file->getPathname(), 1);
+				$dirPath = $file->getPathname();
 				
 				$dir_list_output[] =  $dirPath;
 				
@@ -441,7 +431,9 @@ class Bulk_Watermark_Tools{
 			
 		$allowed_types= array('jpg', 'gif', 'png');
 		
+		//$flags = FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS;
 		$iterator = new RecursiveDirectoryIterator($dir);
+		
 		foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
 			$file_info = pathinfo($file->getFilename());
 			
