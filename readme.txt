@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.6.2
+Stable tag: 1.6.3
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
@@ -162,6 +162,12 @@ Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-waterm
 
 
 == Changelog ==
+
+= 1.6.3 =
+* removed FilesystemIterator which was causing compatibility issues because it is only available in php 5.3+
+* updated contextual help, removed depricated filter and updated to preferred method
+* added uninstall and deactivation funtions to clear plugin settings
+
 
 = 1.6.2 =
 * updated the watermark application system to resolve issues with locating the correct dicectory.

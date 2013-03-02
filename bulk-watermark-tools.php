@@ -400,8 +400,8 @@ class Bulk_Watermark_Tools{
 		//$dir_list_output[] = preg_replace($pattern, '', $base_dir, 1);
 		$dir_list_output[] = $base_dir;
 				
-		$flags = FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS;		
-		$iterator = new RecursiveDirectoryIterator($base_dir, $flags);
+		//$flags = FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS;		
+		$iterator = new RecursiveDirectoryIterator($base_dir);
 		
 		foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
 			$file_info = pathinfo($file->getFilename());
@@ -431,8 +431,8 @@ class Bulk_Watermark_Tools{
 			
 		$allowed_types= array('jpg', 'gif', 'png');
 		
-		$flags = FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS;
-		$iterator = new RecursiveDirectoryIterator($dir, $flags);
+		//$flags = FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS;
+		$iterator = new RecursiveDirectoryIterator($dir);
 		
 		foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
 			$file_info = pathinfo($file->getFilename());

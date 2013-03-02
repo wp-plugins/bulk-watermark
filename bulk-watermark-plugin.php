@@ -6,7 +6,7 @@ class Bulk_Watermark_Plugin{
 
 
 	//plugin version number
-	private $version = "1.6.2";
+	private $version = "1.6.3";
 	
 	private $debug = false;
 
@@ -71,7 +71,7 @@ class Bulk_Watermark_Plugin{
         add_action( 'admin_menu', array(&$this, 'admin_menu') );
 		
 		//add help menu to settings page
-		add_filter( 'contextual_help', array(&$this,'admin_help'), 10, 3);	
+		//add_filter( 'contextual_help', array(&$this,'admin_help'), 10, 3);	
 		
 		// add plugin "Settings" action on plugin list
 		add_action('plugin_action_links_' . plugin_basename(BW_LOADER), array(&$this, 'add_plugin_actions'));
@@ -372,16 +372,25 @@ class Bulk_Watermark_Plugin{
    	public function admin_menu() {
 		
         $this->page_menu = add_options_page( $this->plugin_title, $this->plugin_title, 'manage_options',  $this->setting_name, array($this, 'plugin_settings_page') );
+		
+		global $wp_version;
+
+   		if($this->page_menu && version_compare($wp_version, '3.3', '>=')){
+			add_action("load-". $this->page_menu, array($this, 'admin_help'));	
+		}
     }
 
 
 
 
-	public function admin_help($contextual_help, $screen_id, $screen){
-	
-		global $simple_backup_file_manager_page;
+	//public function admin_help($contextual_help, $screen_id, $screen){
+	public function admin_help(){
 		
-		if ( $screen_id == $this->page_menu || $screen_id == $simple_backup_file_manager_page ) {
+		 $screen = get_current_screen();
+		 
+		//global $simple_backup_file_manager_page;
+		
+		//if ( $screen_id == $this->page_menu || $screen_id == $simple_backup_file_manager_page ) {
 				
 			$support_the_dev = $this->display_support_us();
 			$screen->add_help_tab(array(
@@ -432,7 +441,7 @@ class Bulk_Watermark_Plugin{
 
 			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
 			
-		}
+		//}
 			
 		
 
