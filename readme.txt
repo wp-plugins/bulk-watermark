@@ -4,8 +4,8 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.6.0
-Donate link: http://MyWebsiteAdvisor.com/donations
+Stable tag: 1.6.5
+Donate link: http://MyWebsiteAdvisor.com/donations/
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
 
@@ -15,8 +15,16 @@ Adds an image and/or text watermark to all uploaded images, using PNG images wit
 This plugin allows you to watermark your previously uploaded images using a PNG image file with transparency as well as text signature.  
 The user friendly settings page allows for control over the appearance of your watermark.  
 You can set your watermarks to always be a specific percentage of the target image.  
-This plugin will add the watermarks to ALL of the images in your wordpress uploads directory.
+This plugin will add the watermarks to ALL of the images in your WordPress uploads directory.
 Please BACK UP all of your uploads via FTP before using this plugin!
+
+
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
+watermark features including:
+
+* Fully Adjustable Text and Image Watermark Positions
+* Highest Quality Watermarks using Image Re-sampling rather than Re-sizing
+* Lifetime Priority Support and Update License
 
 
 Check out the [Bulk Watermark Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1):
@@ -25,15 +33,15 @@ http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1
 
 
 
-Developer Website: http://MyWebsiteAdvisor.com
+Developer Website: http://MyWebsiteAdvisor.com/
+
+Plugin Support: http://MyWebsiteAdvisor.com/support/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/bulk-watermark/
 
 Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-watermark-tutorial/
 
-We are looking for testimonials and live examples of our plugins on your website!  
-Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials  
-If we choose your testimonial or website we can link to your site and generate some free traffic for you!
+
 
 
 Requirements:
@@ -71,6 +79,7 @@ Check in your error.log if you can.
 Please send screenshots as well as a detailed description of the problem.
 
 
+
 = Error message says that I don't have GD or FreeType extension installed =
 
 Contact your hosting provider and ask them to enable GD extension for your host,  
@@ -80,16 +89,69 @@ FreeType extension is required for text watermarks.
 
 
 
+= Error message says that I need to enable the allow_url_fopen option =
 
-Developer Website: http://MyWebsiteAdvisor.com
+Contact your hosting provider and ask them to enable allow_url_fopen, most likely in your php.ini  
+It may be necessary to create a php.ini file inside of the wp-admin directory to enable the allow_url_fopen option.
+
+
+
+= How do I Remove Watermarks? =
+
+This plugin permenantly alters the images to contain the watermarks, so the watermarks can not be removed. 
+If you want to simply test this plugin, or think you may want to remove the watermarks, you need to make a backup of your images before you use the plugin to add watermarks.
+<a href="http://wordpress.org/extend/plugins/simple-backup/">**Try Simple Backup Plugin**</a>
+
+
+
+= How can I Adjust the Location of the Watermarks? = 
+
+We have a premium version of this plugin that adds the capability to adjust the locations of the watermarks.
+The positions can be adjusted both vertically and horizontally.
+
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
+watermark features including:
+
+* Fully Adjustable Text and Image Watermark Positions
+* Highest Quality Watermarks using Image Re-sampling rather than Re-sizing
+* Lifetime Priority Support and Update License
+
+
+
+
+= How do I generate the Highest Quality Watermarks? = 
+
+We recommend that your watermark image be roughly the same width as the largest images you plan to watermark.
+That way the watermark image will be scaled down, which will work better than making the watermark image larger in order to fit.
+
+We also have a premium version of this plugin that adds the capability to resample the watermark image, rather than simply resize it.
+This results in significantly better looking watermarks.
+
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
+watermark features including:
+
+* Fully Adjustable Text and Image Watermark Positions
+* Highest Quality Watermarks using Image Re-sampling rather than Re-sizing
+* Lifetime Priority Support and Update License
+
+
+
+Check out the [Bulk Watermark Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1):
+
+http://www.youtube.com/watch?v=XkFXBjfzw2I&hd=1
+
+
+
+
+
+
+Developer Website: http://MyWebsiteAdvisor.com/
+
+Plugin Support: http://MyWebsiteAdvisor.com/support/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/bulk-watermark/
 
 Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-watermark-tutorial/
-
-We are looking for testimonials and live examples of our plugins on your website!
-Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials
-If we choose your testimonial or website we can link to your site and generate some free traffic for you!
 
 
 
@@ -108,9 +170,34 @@ If we choose your testimonial or website we can link to your site and generate s
 
 == Changelog ==
 
+= 1.6.5 =
+* added .jpeg to the list of allowed file types
+
+= 1.6.4 =
+* updated plugin FAQs
+* updated readme file
+
+= 1.6.3 =
+* removed FilesystemIterator which was causing compatibility issues because it is only available in php 5.3+
+* updated contextual help, removed deprecated filter and updated to preferred method
+* added uninstall and deactivation functions to clear plugin settings
+
+
+= 1.6.2 =
+* updated the watermark application system to resolve issues with locating the correct directory.
+* updated support links
+* updated readme file
+* updated plugin upgrades information
+
+
+= 1.6.1 =
+* updated readme file
+* added plugin upgrades tab to settings page
+
+
 = 1.6.0 =
 * rebuilt plugin using settings API
-* added tabbed navingation for plugin settings and tools
+* added tabbed navigation for plugin settings and tools
 * updated readme file, due to the add_help_tab() function, the plugin requires at least WordPress version 3.3
 * added notification about required version if an older version of WP is installed
 * added tutorial video to plugin
