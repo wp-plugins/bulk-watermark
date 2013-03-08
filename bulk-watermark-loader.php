@@ -3,7 +3,7 @@
 Plugin Name: Bulk Watermark
 Plugin URI: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/bulk-watermark/
 Description: Add transparent PNG image and text signature watermark to your previously uploaded images.
-Version: 1.6.3
+Version: 1.6.4
 Author: MyWebsiteAdvisor
 Author URI: http://MyWebsiteAdvisor.com
 */
@@ -39,6 +39,7 @@ function bulk_watermark_activate() {
 if ( version_compare( phpversion(), '5.0', '>=') ) {
 	define('BW_LOADER', __FILE__);
 
+	include_once(dirname(__FILE__) . '/bulk-watermark-plugin-installer.php');	
 	require_once(dirname(__FILE__) . '/bulk-watermark-settings-page.php');	
 	require_once(dirname(__FILE__) . '/bulk-watermark-tools.php');	
 		
