@@ -429,7 +429,7 @@ class Bulk_Watermark_Tools{
 		$base_dir = $upload_dir['basedir'];
 		$base_url = $upload_dir['baseurl'];
 			
-		$allowed_types= array('jpg', 'gif', 'png');
+		$allowed_types= array('jpg', 'jpeg', 'gif', 'png');
 		
 		//$flags = FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS;
 		$iterator = new RecursiveDirectoryIterator($dir);

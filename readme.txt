@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.6.4
+Stable tag: 1.6.5
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
@@ -169,6 +169,9 @@ Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-waterm
 
 
 == Changelog ==
+
+= 1.6.5 =
+* added .jpeg to the list of allowed file types
 
 = 1.6.4 =
 * updated plugin FAQs
