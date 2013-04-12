@@ -6,7 +6,7 @@ class Bulk_Watermark_Plugin{
 
 
 	//plugin version number
-	private $version = "1.6.5";
+	private $version = "1.6.6";
 	
 	private $debug = false;
 
@@ -575,7 +575,7 @@ class Bulk_Watermark_Plugin{
 			<p><a href='http://MyWebsiteAdvisor.com/'  target='_blank'>Visit our Website!</a></p>";
 	
 		$upgrade = "	<p>
-			<b><a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/'  target='_blank'>Upgrade to Bulk Watermark Ultra!</a></b><br />
+			<b><a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/bulk-watermark-ultra/'  target='_blank'>Upgrade to Bulk Watermark Ultra!</a></b><br />
 			<br />
 			<b>Features:</b><br />
 			-Higher Quality Watermarks!<br />
@@ -721,7 +721,7 @@ class Bulk_Watermark_Plugin{
 		$html .= "<script>
 				
 			function  bulk_watermark_upgrade(){
-        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/');
+        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/bulk-watermark-ultra/');
         		return false;
 			}
 			
@@ -939,7 +939,7 @@ class Bulk_Watermark_Plugin{
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(BW_LOADER)) {
-			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/bulk-watermark-ultra/';
+			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/bulk-watermark-ultra/';
 			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
 			
 			$install_url = admin_url()."plugins.php?page=MyWebsiteAdvisor";
