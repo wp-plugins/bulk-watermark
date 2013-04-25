@@ -1,10 +1,10 @@
 === Bulk Watermark ===
 Name: Bulk Watermark
 Contributors: MyWebsiteAdvisor, ChrisHurst
-Tags: Watermark, Signature, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin
+Tags: Watermark, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin, Security, administration, automatic, media
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.6.6.1
+Stable tag: 1.6.7
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
@@ -16,13 +16,15 @@ This plugin allows you to watermark your previously uploaded images using a PNG 
 The user friendly settings page allows for control over the appearance of your watermark.  
 You can set your watermarks to always be a specific percentage of the target image.  
 This plugin will add the watermarks to ALL of the images in your WordPress uploads directory.
+
 Please BACK UP all of your uploads via FTP before using this plugin!
 
 
-<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
+<a href="http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
 watermark features including:
 
 * Fully Adjustable Text and Image Watermark Positions
+* Adjustable JPEG Image Output Quality
 * Highest Quality Watermarks using Image Re-sampling rather than Re-sizing
 * Lifetime Priority Support and Update License
 
@@ -38,6 +40,8 @@ Developer Website: http://MyWebsiteAdvisor.com/
 Plugin Support: http://MyWebsiteAdvisor.com/support/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/bulk-watermark/
+
+Compare Watermark Plugins: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/watermark-plugins-for-wordpress/
 
 Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-watermark-tutorial/
 
@@ -109,10 +113,11 @@ If you want to simply test this plugin, or think you may want to remove the wate
 We have a premium version of this plugin that adds the capability to adjust the locations of the watermarks.
 The positions can be adjusted both vertically and horizontally.
 
-<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
+<a href="http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
 watermark features including:
 
 * Fully Adjustable Text and Image Watermark Positions
+* Adjustable JPEG Image Output Quality
 * Highest Quality Watermarks using Image Re-sampling rather than Re-sizing
 * Lifetime Priority Support and Update License
 
@@ -127,10 +132,11 @@ That way the watermark image will be scaled down, which will work better than ma
 We also have a premium version of this plugin that adds the capability to resample the watermark image, rather than simply resize it.
 This results in significantly better looking watermarks.
 
-<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/bulk-watermark-ultra/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
+<a href="http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/">**Upgrade to Bulk Watermark Ultra**</a> for advanced
 watermark features including:
 
 * Fully Adjustable Text and Image Watermark Positions
+* Adjustable JPEG Image Output Quality
 * Highest Quality Watermarks using Image Re-sampling rather than Re-sizing
 * Lifetime Priority Support and Update License
 
@@ -151,6 +157,8 @@ Plugin Support: http://MyWebsiteAdvisor.com/support/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/bulk-watermark/
 
+Compare Watermark Plugins: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/watermark-plugins-for-wordpress/
+
 Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-watermark-tutorial/
 
 
@@ -158,17 +166,24 @@ Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-waterm
 
 == Screenshots ==
 
-1. Finished Example Image
-2. Watermark Settings
-3. Watermark Settings Preview
-4. Select Images to Watermark with Image Preview Popup
-5. Watermarks getting applied to the selected images
-
+1. General Settings
+2. Text Watermark Settings
+3. Image Watermark Settings
+4. Watermark Settings Preview
+5. Select Images to Watermark with Image Preview Popup
+6. Finished Example Image
 
 
 
 
 == Changelog ==
+
+= 1.6.7 =
+* updated plugin settings system
+* added info about workaround for users who have 'allow_url_fopen' disabled, using relative path to watermark image.
+* updated default JPEG output quality from 100 to 90 to reduce file bloat, added option to ultra version to adjust output quality.
+* updated plugin screenshots
+
 
 = 1.6.6.1 =
 * updated links to plugin page

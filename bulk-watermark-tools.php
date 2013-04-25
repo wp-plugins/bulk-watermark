@@ -155,10 +155,10 @@ class Bulk_Watermark_Tools{
 
 	private function apply_watermark_text($image, array $opt) {
 		
-		$text  =  $opt['watermark_settings']['watermark_text'];
-		$text_size = $opt['watermark_settings']['watermark_text_width'] / 100;
-		$text_color  =  $opt['watermark_settings']['watermark_text_color'];
-		$text_transparency  =  $opt['watermark_settings']['watermark_text_transparency'];
+		$text  =  $opt['text_watermark_settings']['watermark_text'];
+		$text_size = $opt['text_watermark_settings']['watermark_text_width'] / 100;
+		$text_color  =  $opt['text_watermark_settings']['watermark_text_color'];
+		$text_transparency  =  $opt['text_watermark_settings']['watermark_text_transparency'];
 		
 		$v_pos = .5;
 		$h_pos = .5;
@@ -184,7 +184,7 @@ class Bulk_Watermark_Tools{
 		//$text_color = ImageColorAllocateAlpha($image, 255, 255, 255, 96);
 		
 		// Add the text to image
-		imagettftext($image, $font_size, 0, $txt_dest_x, $txt_dest_y, $text_color, $opt['watermark_settings']['watermark_font'], html_entity_decode($text));
+		imagettftext($image, $font_size, 0, $txt_dest_x, $txt_dest_y, $text_color, $opt['text_watermark_settings']['watermark_font'], html_entity_decode($text));
 
 		return $image;
 	}
@@ -199,8 +199,8 @@ class Bulk_Watermark_Tools{
 	 */
 	private function apply_watermark_image($image, array $opt) {
 		// get size and url of watermark
-		$image_size  =  $opt['watermark_settings']['watermark_image_width'] / 100;
-		$url  =  $opt['watermark_settings']['watermark_image_url'];
+		$image_size  =  $opt['image_watermark_settings']['watermark_image_width'] / 100;
+		$url  =  $opt['image_watermark_settings']['watermark_image_url'];
 		//$quality = $opt['watermark_image']['quality'];
 		$v_pos = .9;
 		$h_pos = .9;
@@ -238,7 +238,7 @@ class Bulk_Watermark_Tools{
 	 * @return unknown
 	 */
 	private function get_full_font_path(array $opt) {
-		$opt['watermark_settings']['watermark_font'] = $this->plugin_dir . "/fonts/" . $opt['watermark_settings']['watermark_font'];
+		$opt['text_watermark_settings']['watermark_font'] = $this->plugin_dir . "/fonts/" . $opt['text_watermark_settings']['watermark_font'];
 
 		return $opt;
 	}
@@ -275,8 +275,8 @@ class Bulk_Watermark_Tools{
 		$bbox = imagettfbbox(
 			$font_size,
 			0,
-			$opt['watermark_settings']['watermark_font'],
-			html_entity_decode($opt['watermark_settings']['watermark_text'])
+			$opt['text_watermark_settings']['watermark_font'],
+			html_entity_decode($opt['text_watermark_settings']['watermark_text'])
 		);
 
 		//calculate height and width of text
@@ -304,7 +304,7 @@ class Bulk_Watermark_Tools{
 		$size = $this->calculate_text_box_size($opt, $font_size);
 
 		//calculate font size needed to fill the desired wwatermark text width, based on size of original image
-		$font_size_ratio = (($opt['watermark_settings']['watermark_text_width'] / 100) * $width)  / $size['width'];
+		$font_size_ratio = (($opt['text_watermark_settings']['watermark_text_width'] / 100) * $width)  / $size['width'];
 		
 		$font_size = $font_size * $font_size_ratio;
 			
@@ -363,8 +363,7 @@ class Bulk_Watermark_Tools{
 	private function save_image_file($image, $mime_type, $filepath) {
 		switch ( $mime_type ) {
 			case 'image/jpeg':
-				//return imagejpeg($image, $filepath, apply_filters( 'jpeg_quality', 100 ));
-				return imagejpeg($image, $filepath, 100);
+				return imagejpeg($image, $filepath, 90);
 			case 'image/png':
 				return imagepng($image, $filepath);
 			case 'image/gif':
@@ -458,6 +457,36 @@ class Bulk_Watermark_Tools{
 		return $file_list_output;
 	}
 	
+	
+	
+	function get_relative_path($from, $to){
+		$from     = explode('/', $from);
+		$to       = explode('/', $to);
+		$relPath  = $to;
+	
+		foreach($from as $depth => $dir) {
+			// find first non-matching dir
+			if($dir === $to[$depth]) {
+				// ignore this directory
+				array_shift($relPath);
+			} else {
+				// get number of remaining dirs to $from
+				$remaining = count($from) - $depth;
+				if($remaining > 1) {
+					// add traversals up to first matching dir
+					$padLength = (count($relPath) + $remaining - 1) * -1;
+					$relPath = array_pad($relPath, $padLength, '..');
+					break;
+				} else {
+					$relPath[0] = './' . $relPath[0];
+				}
+			}
+		}
+		return implode('/', $relPath);
+	}
+
+
+
 }
 
 ?>
