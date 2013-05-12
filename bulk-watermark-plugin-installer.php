@@ -3,10 +3,11 @@
 
 if( ! class_exists('MWA_Plugin_Install_List_Table')){
 
-	
+
 	require_once(ABSPATH . '/wp-admin/includes/admin.php');
 	
 	
+	// create MyWebsiteAdvisor More Plugins Menu List Table 
 	class MWA_Plugin_Install_List_Table extends WP_List_Table {
 	
 	
@@ -26,6 +27,9 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 	
 	
 			$this->_column_headers = array( $columns, $hidden, $sortable );
+			
+			
+
 			
 		}
 	
@@ -47,7 +51,7 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 	
 			$paged = $this->get_pagenum();
 	
-			$per_page = 30;
+			$per_page = 40;
 	
 			// These are the tabs which are shown on the page
 			$tabs = array();
@@ -155,11 +159,8 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 		function display_tablenav( $which ) {
 			if ( 'top' ==  $which ) { ?>
 				<div class="tablenav top">
-					<div class="alignleft actions">
-						<?php 
-						//$_REQUEST['s'] = "MyWebsiteAdvisor";
-						//$_REQUEST['type'] = "author";
-						//do_action( 'install_plugins_table_header' ); ?>
+					<div class="alignright actions">
+                    	
 					</div>
 					<?php $this->pagination( $which ); ?>
 					<br class="clear" />
@@ -280,6 +281,8 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 
 
 
+
+	//generate MyWebsiteAdvisor More Plugins list
 	function add_mwa_plugins_list(){
 		
 		require_once(ABSPATH . '/wp-admin/includes/admin.php');
@@ -290,6 +293,39 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 		$wp_list_table->prepare_items();
 		
 		wp_enqueue_script( 'plugin-install' );
+		
+		$disable_plugin_installer_nonce = wp_create_nonce("mywebsiteadvisor-plugin-installer-menu-disable");	
+		
+		$plugin_installer_ajax = " <script>
+			function update_mwa_display_plugin_installer_options(){
+				  
+						jQuery('#display_mwa_plugin_installer_label').text('Updating...');
+						
+						var menu_enabled = jQuery('#display_mywebsiteadvisor_plugin_installer_menu:checked').length > 0;
+					  
+						var ajax_data = {
+							'checked': menu_enabled,
+							'action': 'update_mwa_plugin_installer_menu_option', 
+							'security': '$disable_plugin_installer_nonce'
+						};
+						  
+						jQuery.ajax({
+							type: 'POST',
+							url:  ajaxurl,
+							data: ajax_data,
+							success: function(data){
+								if(data == 'true'){
+									jQuery('#display_mwa_plugin_installer_label').text('Enabled!');
+								}
+								if(data == 'false'){
+									jQuery('#display_mwa_plugin_installer_label').text('Disabled!');
+								}
+								//alert(data);
+								//location.reload();
+							}
+						});  
+				  }</script>";
+		
 
 		$tab = "search";
 		$title = __('MyWebsiteAdvisor.com Plugins');
@@ -307,10 +343,13 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
         <div class="wrap">
         
         <?php echo display_mwa_social_media(); ?>     
-                        
+        
         <?php screen_icon( 'plugins' ); ?>
         <h2><?php echo esc_html( $title ); ?></h2>
- 
+        
+        <?php echo $plugin_installer_ajax; ?>
+       	<p><label id='display_mwa_plugin_installer_label'><input type='checkbox' id='display_mywebsiteadvisor_plugin_installer_menu' name='display_mywebsiteadvisor_plugin_installer_menu' onclick="update_mwa_display_plugin_installer_options()" /> Check here to hide this page from the Plugins menu.</label></p>
+        
         <?php $wp_list_table->display(); ?>
         
         </div>
@@ -320,7 +359,9 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 	
 	
 	
-		function display_mwa_social_media(){
+	
+	  
+	function display_mwa_social_media(){
 	
 		$social = '<style>
 	
@@ -355,22 +396,47 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 		return $social;
 
 	}	
-	
+
 	
 
-	function build_mwa_plugins_menu(){
-		
-		add_submenu_page( 'plugins.php', 'More Free Plugins from MyWebsiteAdvisor.com', 'MyWebsiteAdvisor', 'manage_options', 'MyWebsiteAdvisor',  'add_mwa_plugins_list' );
-
+	//add MyWebsiteAdvisor More Plugins Menu to admin menu system
+	function build_mwa_plugins_menu(){ 
+		$enabled = get_option('mywebsiteadvisor_pluigin_installer_menu_disable');
+		if(!isset($enabled) || $enabled == 'true'){
+		//if(!isset(get_option('mywebsiteadvisor_pluigin_installer_menu_disable'))){ 
+			add_submenu_page( 'plugins.php', 'More Free Plugins from MyWebsiteAdvisor.com', 'MyWebsiteAdvisor', 'manage_options', 'MyWebsiteAdvisor',  'add_mwa_plugins_list' );
+		}
 	}
 	
 	
-	
+	// call the MyWebsiteAdvisor More Plugins Menu during admin_menu action
 	add_action( 'admin_menu', 'build_mwa_plugins_menu' );
 
 
 
+
+	//register ajax handler for disabling plugin installer menu
+	add_action('wp_ajax_update_mwa_plugin_installer_menu_option',  'update_mwa_plugin_installer_menu_disable_option');
+
+
+
+	function update_mwa_plugin_installer_menu_disable_option(){
+		ob_clean();
+		check_ajax_referer( 'mywebsiteadvisor-plugin-installer-menu-disable', 'security' );
+		
+		update_option('mywebsiteadvisor_pluigin_installer_menu_disable', $_POST['checked']);
+	
+		echo  $_POST['checked'];
+		die();
+	}
+	
+
+
+	
+
 }
+
+
 
 
 ?>

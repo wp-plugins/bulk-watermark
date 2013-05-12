@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Watermark, Images, Image, Picture, Pictures, Photo, Photos, Upload, Post, Plugin, Page, Admin, Security, administration, automatic, media
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.6.7
+Stable tag: 1.6.8
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 Adds an image and/or text watermark to all uploaded images, using PNG images with transparency.
@@ -177,6 +177,14 @@ Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/bulk-waterm
 
 
 == Changelog ==
+
+= 1.6.8 =
+* updated the MyWebsiteAdvisor Plugin Installer Page to include the option to remove the installer page and menu.
+* updated links to the plugin installer to use the search by author feature when the plugin installer is disabled.
+* added option to the help menu, 'More Free Plugins' section to enable and disable the 'MyWebsiteAdvisor' Plugins installer menu. 
+* updated the plugin settings class to correctly display the disabled checkbox inputs for advanced features.
+
+
 
 = 1.6.7 =
 * updated plugin settings system

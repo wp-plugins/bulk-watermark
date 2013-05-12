@@ -88,7 +88,9 @@ class Bulk_Watermark_Settings_Page{
 					'section' => $section,
 					'size' => isset( $option['size'] ) ? $option['size'] : null,
 					'options' => isset( $option['options'] ) ? $option['options'] : '',
-					'default' => isset( $option['default'] ) ? $option['default'] : ''
+					'default' => isset( $option['default'] ) ? $option['default'] : '',
+					'action' => isset( $option['action'] ) ? $option['action'] : '',
+					'enabled' => isset( $option['enabled'] ) ? $option['enabled'] : '',
 				);
 				
 				add_settings_field( $section . '[' . $option['name'] . ']', $option['label'], array($this, 'do_' . $option['type']), $this->option_name, $section, $args);
@@ -297,12 +299,16 @@ class Bulk_Watermark_Settings_Page{
 	function do_checkbox( $args ) {
 
 		$value = esc_attr( $this->get_section_option( $args['section'], $args['id'], $args['default'] ) );
-
-		$html = sprintf( '<input type="checkbox" class="checkbox" id="%5$s[%1$s][%2$s]" name="%5$s[%1$s][%2$s]" value="on"%4$s />', $args['section'], $args['id'], $value, checked( $value, 'on', false ), $this->option_name );
-		$html .= sprintf( '<label for="%4$s[%1$s][%2$s]"> %3$s</label>', $args['section'], $args['id'], $args['desc'], $this->option_name );
-
+		$disabled = isset($args['enabled']) && ($args['enabled'] == 'false') ? 'disabled="disabled"' : "";
+		
+		//$html = sprintf( '<input type="checkbox" class="checkbox" id="%5$s[%1$s][%2$s]" name="%5$s[%1$s][%2$s]" value="on"%4$s %5$s />', $args['section'], $args['id'], $value, checked( $value, 'on', false ), $this->option_name, $disabled );
+		$html = sprintf( '<input type="checkbox" class="checkbox" id="%5$s[%1$s][%2$s]" name="%5$s[%1$s][%2$s]" value="on" %6$s />', $args['section'], $args['id'], $value, checked( $value, 'on', false ), $this->option_name, $disabled );
+		$html .= sprintf( '<label for="%4$s[%1$s][%2$s]"> %3$s</label>', $args['section'], $args['id'], $args['action'], $this->option_name );
+		$html .= sprintf( '<p><span class="description"> %s</label></p>', $args['desc'] );
+		
 		echo $html;
 	}
+
 
 	/**
 	 * Displays a multicheckbox a settings field
