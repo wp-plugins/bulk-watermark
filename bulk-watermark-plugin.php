@@ -6,7 +6,7 @@ class Bulk_Watermark_Plugin{
 
 
 	//plugin version number
-	private $version = "1.6.8";
+	private $version = "1.6.9";
 	
 	private $debug = false;
 
