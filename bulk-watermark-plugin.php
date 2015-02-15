@@ -6,7 +6,7 @@ class Bulk_Watermark_Plugin{
 
 
 	//plugin version number
-	private $version = "1.6.9";
+	private $version = "1.6.10";
 	
 	private $debug = false;
 
@@ -56,8 +56,8 @@ class Bulk_Watermark_Plugin{
 		$this->tools->opt = $this->opt;
 		
 		if(isset($_GET['action']) && isset($_GET['page']) && "watermark_preview" == $_GET['action'] && "bulk-watermark-settings" == $_GET['page'] ){
-			$this->tools->do_watermark_preview();
-			die();
+			add_action('admin_init', array($this->tools, 'do_watermark_preview'));
+			//die();
 		}
 				
 	
@@ -265,7 +265,7 @@ class Bulk_Watermark_Plugin{
 			array(
 				'name' => 'watermark_image_v_pos',
 				'label' => __( 'Watermark Image Vertical Position', $this->plugin_name ),
-			 	'desc' => __( "Enable Image Watermark Vertical Position Adjustnment.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
+			 	'desc' => __( "Enable Image Watermark Vertical Position Adjustnment.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
                 'action' => 'Enable',
 				'type' => 'checkbox',
                 'enabled' => 'false'
@@ -273,7 +273,7 @@ class Bulk_Watermark_Plugin{
 			array(
 				'name' => 'watermark_image_h_pos',
 				'label' => __( 'Watermark Image Horizontal Position', $this->plugin_name ),
-			 	'desc' => __( "Enable Image Watermark Horizontal Position Adjustnment.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
+			 	'desc' => __( "Enable Image Watermark Horizontal Position Adjustnment.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
                 'action' => 'Enable',
 				'type' => 'checkbox',
                 'enabled' => 'false'
@@ -281,7 +281,7 @@ class Bulk_Watermark_Plugin{
 			array(
 				'name' => 'enable_hq_watermarks',
 				'label' => __( 'High Quality Watermarks', $this->plugin_name ),
-				'desc' => __( "Enable Watermark Resampling which will result in Higher Quality watermarks.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
+				'desc' => __( "Enable Watermark Resampling which will result in Higher Quality watermarks.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
 				'action' => 'Enable',
 				'type' => 'checkbox',
 				'enabled' => 'false'
@@ -338,7 +338,7 @@ class Bulk_Watermark_Plugin{
 				'name' => 'watermark_text_v_pos',
 				'label' => __( 'Watermark Text Vertical Position', $this->plugin_name ),
 				'desc' => 'Configure the Watermark Text Vertical Position (Percentage)',
-			 	'desc' => __( "Enable Text Watermark Vertical Position Adjustnment.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
+			 	'desc' => __( "Enable Text Watermark Vertical Position Adjustnment.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
                 'action' => 'Enable',
 				'type' => 'checkbox',
                 'enabled' => 'false'
@@ -346,7 +346,7 @@ class Bulk_Watermark_Plugin{
 			array(
 				'name' => 'watermark_text_h_pos',
 				'label' => __( 'Watermark Text Horizontal Position', $this->plugin_name ),
-			 	'desc' => __( "Enable Text Watermark Horizontal Position Adjustnment.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
+			 	'desc' => __( "Enable Text Watermark Horizontal Position Adjustnment.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
                 'action' => 'Enable',
 				'type' => 'checkbox',
                 'enabled' => 'false'
@@ -370,7 +370,7 @@ class Bulk_Watermark_Plugin{
 				array(
 					'name' => 'jpeg_quality',
 					'label' => __( 'JPEG Quality Adjustment', $this->plugin_name ),
-					'desc' => __( "Adjustable JPEG image output quality can adjust the size and quality of the finished images.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
+					'desc' => __( "Adjustable JPEG image output quality can adjust the size and quality of the finished images.<br>(Feature Available in Ultra Version Only, <a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/' target='_blank'>Click Here for More Information!</a>)", $this->plugin_name ),
 					'type' => 'checkbox',
 					'action' => 'Enable',
 					'enabled' => 'false'
@@ -519,18 +519,18 @@ class Bulk_Watermark_Plugin{
 			$faqs .= "We recommend that your watermark image be roughly the same width as the largest images you plan to watermark.<br>";
 			$faqs .= "That way the watermark image will be scaled down, which will work better than making the watermark image larger in order to fit.<br>";
 			$faqs .= "We also have a premium version of this plugin that adds the capability to Re-Sample the watermark image, rather than simply Re-Size it, which results in significantly better looking watermarks!<br>";
-			$faqs .= "<b><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Upgrade to Bulk Watermark Ultra</a></b>";
+			$faqs .= "<b><a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/' target='_blank'>Upgrade to Bulk Watermark Ultra</a></b>";
 			$faqs .= "</p>";
 			
 			$faqs .= "<p><b>How can I Adjust the Location of the Watermarks?</b><br>";
 			$faqs .= "We have a premium version of this plugin that adds the capability to adjust the location of the watermarks.<br>";
 			$faqs .= "The position can be adjusted both vertically and horizontally.<br>";
-			$faqs .= "<b><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Upgrade to Bulk Watermark Ultra</a></b>";
+			$faqs .= "<b><a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/' target='_blank'>Upgrade to Bulk Watermark Ultra</a></b>";
 			$faqs .= "</p>";
 			
 			$faqs .= "<p><b>How can I Auitomatically Add Watermarks to new images as they are uploaded?</b><br>";
 			$faqs .= "We have a different plugin which can automatically add watermarks to images as they are uploaded to the WordPress Media Library.<br>";
-			$faqs .= "<b><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/signature-watermark/' target='_blank'>Learn More about Signature Watermark</a></b>";
+			$faqs .= "<b><a href='http://mywebsiteadvisor.com/plugins/signature-watermark/' target='_blank'>Learn More about Signature Watermark</a></b>";
 			$faqs .= "</p>";
 
 
@@ -697,7 +697,7 @@ class Bulk_Watermark_Plugin{
 	
 	private function get_settings_sidebar(){
 	
-		$plugin_resources = "<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Plugin Homepage</a></p>
+		$plugin_resources = "<p><a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/' target='_blank'>Plugin Homepage</a></p>
 			<p><a href='http://mywebsiteadvisor.com/learning/video-tutorials/bulk-watermark-tutorial/'  target='_blank'>Plugin Tutorial</a></p>
 			<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
@@ -711,10 +711,10 @@ class Bulk_Watermark_Plugin{
 			$more_plugins = "<p><b><a href='".admin_url()."plugin-install.php?tab=search&type=author&s=MyWebsiteAdvisor' target='_blank' title='Install More Free Plugins from MyWebsiteAdvisor.com!'>Install More Free Plugins!</a></b></p>";
 		}
 			
-		$more_plugins .= "<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
-			<p><a href='http://mywebsiteadvisor.com/products-page/developer-wordpress-plugins/'  target='_blank'>Developer WordPress Plugins!</a></p>
+		$more_plugins .= "<p><a href='http://mywebsiteadvisor.com/plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
+			<p><a href='http://mywebsiteadvisor.com/plugins/'  target='_blank'>Developer WordPress Plugins!</a></p>
 			<p><a href='http://profiles.wordpress.org/MyWebsiteAdvisor/'  target='_blank'>Free Plugins on Wordpress.org!</a></p>
-			<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/'  target='_blank'>Free Plugins on MyWebsiteAdvisor.com!</a></p>";			
+			<p><a href='http://mywebsiteadvisor.com/plugins/'  target='_blank'>Free Plugins on MyWebsiteAdvisor.com!</a></p>";			
 			
 				
 		$follow_us = "<p><a href='http://facebook.com/MyWebsiteAdvisor/'  target='_blank'>Follow us on Facebook!</a></p>
@@ -723,7 +723,7 @@ class Bulk_Watermark_Plugin{
 			<p><a href='http://MyWebsiteAdvisor.com/'  target='_blank'>Visit our Website!</a></p>";
 	
 		$upgrade = "	<p>
-			<b><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/'  target='_blank'>Upgrade to Bulk Watermark Ultra!</a></b><br />
+			<b><a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/'  target='_blank'>Upgrade to Bulk Watermark Ultra!</a></b><br />
 			<br />
 			<b>Features:</b><br />
 			-Higher Quality Watermarks!<br />
@@ -732,9 +732,9 @@ class Bulk_Watermark_Plugin{
 			-And Much More!<br />
 			 </p>
 			<p>Click Here for <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/watermark-plugins-for-wordpress/' target='_blank'>More Watermark Plugins</a></p>
-			<p>-<a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/' target='_blank'>Bulk Watermark</a></p>
-			<p>-<a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/signature-watermark/' target='_blank'>Signature Watermark</a></p>
-			<p>-<a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/transparent-image-watermark/' target='_blank'>Transparent Image Watermark</a></p>
+			<p>-<a href='http://mywebsiteadvisor.com/plugins/bulk-watermark/' target='_blank'>Bulk Watermark</a></p>
+			<p>-<a href='http://mywebsiteadvisor.com/plugins/signature-watermark/' target='_blank'>Signature Watermark</a></p>
+			<p>-<a href='http://mywebsiteadvisor.com/plugins/transparent-image-watermark/' target='_blank'>Transparent Image Watermark</a></p>
 			</p>";
 	
 		$sidebar_info = array(
@@ -869,7 +869,7 @@ class Bulk_Watermark_Plugin{
 		$html .= "<script>
 				
 			function  bulk_watermark_upgrade(){
-        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/');
+        		window.open('http://mywebsiteadvisor.com/plugins/bulk-watermark/');
         		return false;
 			}
 			
@@ -881,12 +881,12 @@ class Bulk_Watermark_Plugin{
 					
 						
 			function  sig_watermark_learn_more(){
-        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/signature-watermark/');
+        		window.open('http://mywebsiteadvisor.com/plugins/signature-watermark/');
         		return false;
 			}
 		
 			function  bulk_watermark_learn_more(){
-        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/');
+        		window.open('http://mywebsiteadvisor.com/plugins/bulk-watermark/');
         		return false;
 			}
 			
@@ -1087,10 +1087,10 @@ class Bulk_Watermark_Plugin{
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(BW_LOADER)) {
-			$upgrade_url = 'http://mywebsiteadvisor.com/tools/wordpress-plugins/bulk-watermark/';
+			$upgrade_url = 'http://mywebsiteadvisor.com/plugins/bulk-watermark/';
 			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
 			
-			$install_url = admin_url()."plugins.php?page=MyWebsiteAdvisor";
+			$install_url = admin_url()."plugin-install.php?tab=search&type=author&s=MyWebsiteAdvisor";
 			$links[] = '<a href="'.$install_url.'" target="_blank" title="Click Here to Install More Free Plugins!">More Plugins</a>';
 			
 			$tutorial_url = 'http://mywebsiteadvisor.com/learning/video-tutorials/bulk-watermark-tutorial/';
@@ -1117,7 +1117,7 @@ class Bulk_Watermark_Plugin{
 	
 		$string .= "<li><a href='http://facebook.com/MyWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Facebook'>Click Here</a> to Follow MyWebsiteAdvisor on Facebook!</li>";
 		$string .= "<li><a href='http://twitter.com/MWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Twitter'>Click Here</a> to Follow MyWebsiteAdvisor on Twitter!</li>";
-		$string .= "<li><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/' target='_blank' title='Click Here to Purchase one of our Premium WordPress Plugins'>Click Here</a> to Purchase Premium WordPress Plugins!</li>";
+		$string .= "<li><a href='http://mywebsiteadvisor.com/plugins/' target='_blank' title='Click Here to Purchase one of our Premium WordPress Plugins'>Click Here</a> to Purchase Premium WordPress Plugins!</li>";
 	
 		return $string;
 	}
